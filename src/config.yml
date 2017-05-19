@@ -1,0 +1,7 @@
+first-join-message: true
+
+login-message-intervall: 10
+
+auto-relog: true
+auto-relog-min: 5
+    

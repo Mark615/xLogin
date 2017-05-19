@@ -1,0 +1,32 @@
+command:
+    description: 'commands'
+    nopermission: 'You don''t have permissions to run this command'
+    player-not-found: 'The Player can''t be found'
+    no-consol-command: 'This is a player command'
+    wrong-pw: 'Password is wrong'
+    already-logged-in: 'You are logged in'
+    xlogin:
+        register:
+            description: 'Login to you account'
+            use-login: 'You are registerd'
+            error-pw: 'Passwords are not equal'
+            success: 'Your registerd successfully'
+        login:
+            description: 'Login to you account'
+            use-register: 'You are no registerd.'
+            success: 'Your are logged in'
+        change:
+            description: 'Change own password'
+            success: 'Your password is changed'
+        set:
+            description: 'Set password from player'
+            success-sender: 'Player account password has been changed'
+            success-target: 'you password has been changed'
+        reset:
+            description: 'reset Login account on the server'
+            success: 'Your account has been reset'
+message:
+    first-join: 'Has Joined For The First Time!'
+    autorelog: '&2You have been relogged. Welcome back'
+    register: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to register.%ln%&4use /xlogin register <pw> <pw>&f%ln%&8------------------------------'
+    login: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to login.%ln%&4use /xlogin login <pw>&f%ln%&8------------------------------'

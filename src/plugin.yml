@@ -1,0 +1,13 @@
+name: xLogin
+main: de.mark615.xlogin.XLogin
+version: 1.0
+description: Login Plugin
+author: Mark615
+
+commands:
+  xlogin:
+    description: Xlogin command
+    usage: /xlogin
+    aliases: [xl]
+    default: op
+permissions:
