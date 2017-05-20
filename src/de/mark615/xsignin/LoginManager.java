@@ -1,4 +1,4 @@
-package de.mark615.xlogin;
+package de.mark615.xsignin;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -10,17 +10,17 @@ import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import de.mark615.xlogin.object.XDatabase;
-import de.mark615.xlogin.object.XPlayerSubject;
-import de.mark615.xlogin.object.XUtil;
+import de.mark615.xsignin.object.XDatabase;
+import de.mark615.xsignin.object.XPlayerSubject;
+import de.mark615.xsignin.object.XUtil;
 
 public class LoginManager
 {
 	private XDatabase database = null;
-	private XLogin plugin = null;
+	private XSignIn plugin = null;
 	private Map<UUID, XPlayerSubject> player = null;
 	
-	public LoginManager(XLogin plugin)
+	public LoginManager(XSignIn plugin)
 	{
 		this.plugin = plugin;
 		this.player = new HashMap<>();
@@ -33,7 +33,7 @@ public class LoginManager
 		XPlayerSubject subject = player.get(target.getUniqueId());
 		if (subject != null)
 		{
-			if (target.hasPermission("xlogin.autorelog") && plugin.getSettingManager().hasAutoRelog())
+			if (target.hasPermission("xsignin.autorelog") && plugin.getSettingManager().hasAutoRelog())
 			{
 				if ((System.currentTimeMillis() - subject.getLogoutTime()) < plugin.getSettingManager().getAutoRelogTime())
 				{
@@ -68,7 +68,7 @@ public class LoginManager
 	{
 		if (database.hasPlayerAccount(target.getUUID()))
 		{
-			XUtil.sendCommandInfo(target.getPlayer(), XUtil.getMessage("command.xlogin.register.use-login") + " use /xlogin login <pw>");
+			XUtil.sendCommandInfo(target.getPlayer(), XUtil.getMessage("command.xsignin.register.use-login") + " use /xsignin login <pw>");
 			return false;
 		}
 
@@ -185,7 +185,7 @@ public class LoginManager
 	{
 		if (!database.hasPlayerAccount(target.getUniqueId()))
 		{
-			XUtil.sendCommandInfo(target, XUtil.getMessage("command.xlogin.login.use-register") + " use /xlogin register <pw> <pw>");
+			XUtil.sendCommandInfo(target, XUtil.getMessage("command.xsignin.login.use-register") + " use /xsignin register <pw> <pw>");
 			return false;
 		}
 		return true;

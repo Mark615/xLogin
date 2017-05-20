@@ -1,4 +1,4 @@
-package de.mark615.xlogin;
+package de.mark615.xsignin;
 
 import org.bukkit.entity.Player;
 
@@ -6,10 +6,10 @@ import de.mark615.xapi.interfaces.XLoginApi;
 
 public class XApiConnector extends XLoginApi
 {
-	private XLogin plugin;
+	private XSignIn plugin;
 	//private PriorityConfigBase priority;
 	
-	public XApiConnector(de.mark615.xapi.XApi xapi, XLogin plugin)
+	public XApiConnector(de.mark615.xapi.XApi xapi, XSignIn plugin)
 	{
 		super(xapi);
 		//this.priority = xapi.getPriorityConfig();

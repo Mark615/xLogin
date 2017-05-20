@@ -1,4 +1,4 @@
-package de.mark615.xlogin;
+package de.mark615.xsignin;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import de.mark615.xlogin.object.XUtil;
+import de.mark615.xsignin.object.XUtil;
 
 public class SettingManager
 {

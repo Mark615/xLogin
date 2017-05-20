@@ -5,7 +5,7 @@ command:
     no-consol-command: 'This is a player command'
     wrong-pw: 'Password is wrong'
     already-logged-in: 'You are logged in'
-    xlogin:
+    xsignin:
         register:
             description: 'Login to you account'
             use-login: 'You are registerd'

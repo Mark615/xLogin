@@ -1,4 +1,4 @@
-package de.mark615.xlogin.commands;
+package de.mark615.xsignin.commands;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package de.mark615.xlogin.object;
+package de.mark615.xsignin.object;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

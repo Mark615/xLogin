@@ -1,28 +1,28 @@
-package de.mark615.xlogin.object;
+package de.mark615.xsignin.object;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import de.mark615.xlogin.SettingManager;
-import de.mark615.xlogin.XLogin;
+import de.mark615.xsignin.SettingManager;
+import de.mark615.xsignin.XSignIn;
 
 public class XUtil
 {
 	public static void info(String info)
 	{
-		Bukkit.getLogger().info(XLogin.PLUGIN_NAME + info);
+		Bukkit.getLogger().info(XSignIn.PLUGIN_NAME + info);
 	}
 
 	public static void warning(String severe)
 	{
-		Bukkit.getLogger().info(XLogin.PLUGIN_NAME + "[WARNING] " + severe);
+		Bukkit.getLogger().info(XSignIn.PLUGIN_NAME + "[WARNING] " + severe);
 	}
 	
 	public static void severe(String severe)
 	{
-		Bukkit.getLogger().severe(XLogin.PLUGIN_NAME + severe);
+		Bukkit.getLogger().severe(XSignIn.PLUGIN_NAME + severe);
 	}
 	
 	public static void debug(Exception e)
@@ -50,7 +50,7 @@ public class XUtil
 			if (!prefix)
 				sender.sendMessage(line);
 			else
-				sender.sendMessage(XLogin.PLUGIN_NAME_SHORT + line);
+				sender.sendMessage(XSignIn.PLUGIN_NAME_SHORT + line);
 		}
 	}
 	

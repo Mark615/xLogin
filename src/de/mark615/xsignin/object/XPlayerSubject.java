@@ -1,11 +1,11 @@
-package de.mark615.xlogin.object;
+package de.mark615.xsignin.object;
 
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import de.mark615.xlogin.XLogin;
+import de.mark615.xsignin.XSignIn;
 
 public class XPlayerSubject
 {
@@ -54,8 +54,8 @@ public class XPlayerSubject
 	
 	private void triggerLoginEvent()
 	{
-		if (XLogin.getInstance() != null && XLogin.getInstance().hasAPI())
-			XLogin.getInstance().getAPI().createPlayerLoggedInEvent(getPlayer());
+		if (XSignIn.getInstance() != null && XSignIn.getInstance().hasAPI())
+			XSignIn.getInstance().getAPI().createPlayerLoggedInEvent(getPlayer());
 	}
 	
 	public void logPlayerOut()

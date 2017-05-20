@@ -1,4 +1,4 @@
-package de.mark615.xlogin.events;
+package de.mark615.xsignin.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,15 +13,15 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import de.mark615.xlogin.XLogin;
-import de.mark615.xlogin.object.XPlayerSubject;
-import de.mark615.xlogin.object.XUtil;
+import de.mark615.xsignin.XSignIn;
+import de.mark615.xsignin.object.XPlayerSubject;
+import de.mark615.xsignin.object.XUtil;
 
 public class PlayerEvents implements Listener
 {
-	private XLogin plugin;
+	private XSignIn plugin;
 
-	public PlayerEvents(XLogin instance)
+	public PlayerEvents(XSignIn instance)
 	{
 		this.plugin = instance;
 		registerTask();
