@@ -98,7 +98,7 @@ public class XSignIn extends JavaPlugin
 	    	if (xapi.checkVersion(XType.xLogin, BUILD))
 	    	{
 	        	xapiconn = new XApiConnector(xapi, this);
-	        	xapi.registerXLogin(xapiconn);
+	        	xapi.registerXSignIn(xapiconn);
 	    	}
 	    	else
 	    	{
@@ -109,7 +109,7 @@ public class XSignIn extends JavaPlugin
 		    		XUtil.warning("Trying to hook to xApi. Have an eye into console for errors with xApi!");
 
 		        	xapiconn = new XApiConnector(xapi, this);
-		        	xapi.registerXLogin(xapiconn);
+		        	xapi.registerXSignIn(xapiconn);
 	    		}
 	    		else
 	    		{

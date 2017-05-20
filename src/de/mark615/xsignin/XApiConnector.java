@@ -2,9 +2,9 @@ package de.mark615.xsignin;
 
 import org.bukkit.entity.Player;
 
-import de.mark615.xapi.interfaces.XLoginApi;
+import de.mark615.xapi.interfaces.XSignInApi;
 
-public class XApiConnector extends XLoginApi
+public class XApiConnector extends XSignInApi
 {
 	private XSignIn plugin;
 	//private PriorityConfigBase priority;
