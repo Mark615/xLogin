@@ -1,4 +1,4 @@
-# xLogin
+# xSignIn
 Xlogin is a login plugin for Minecraft
 # xApi
 Support [xapi](https://github.com/Mark615/xApi)
