@@ -20,7 +20,7 @@ import de.mark615.xsignin.object.XUtil;
 
 public class XSignIn extends JavaPlugin
 {
-	public static final int BUILD = 1;
+	public static final int BUILD = 2;
 	public static final String PLUGIN_NAME = "[xSignIn] ";
 	public static final String PLUGIN_NAME_SHORT = "[xSignIn] ";
 	
@@ -95,7 +95,7 @@ public class XSignIn extends JavaPlugin
     	
     	try
     	{
-	    	if (xapi.checkVersion(XType.xLogin, BUILD))
+	    	if (xapi.checkVersion(XType.xSignIn, BUILD))
 	    	{
 	        	xapiconn = new XApiConnector(xapi, this);
 	        	xapi.registerXSignIn(xapiconn);
@@ -103,7 +103,7 @@ public class XSignIn extends JavaPlugin
 	    	else
 	    	{
 	    		XUtil.severe("Can't hook to xApi!"); 
-	    		if (VersionCheck.isXPluginHigherXApi(XType.xLogin, BUILD))
+	    		if (VersionCheck.isXPluginHigherXApi(XType.xSignIn, BUILD))
 	    		{
 		    		XUtil.warning("Please update your xApi!");
 		    		XUtil.warning("Trying to hook to xApi. Have an eye into console for errors with xApi!");
@@ -119,6 +119,7 @@ public class XSignIn extends JavaPlugin
     	}
     	catch (Exception e)
     	{
+    		e.printStackTrace();
     		XUtil.severe("An error accurred during connection to xApi!");
     	}
     	

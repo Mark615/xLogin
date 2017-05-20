@@ -6,8 +6,8 @@ author: Mark615
 
 commands:
   xlogin:
-    description: Xlogin command
+    description: xSignin command
     usage: /xsignin
-    aliases: [xsign, xs]
+    aliases: [xs]
     default: op
 permissions:
