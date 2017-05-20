@@ -28,5 +28,5 @@ command:
 message:
     first-join: 'Has Joined For The First Time!'
     autorelog: '&2You have been relogged. Welcome back'
-    register: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to register.%ln%&4use /xlogin register <pw> <pw>&f%ln%&8------------------------------'
-    login: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to login.%ln%&4use /xlogin login <pw>&f%ln%&8------------------------------'
+    register: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to register.%ln%&4use /xsignin register <pw> <pw>&f%ln%&8------------------------------'
+    login: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to login.%ln%&4use /xsignin login <pw>&f%ln%&8------------------------------'
