@@ -22,7 +22,7 @@ public class XDatabase
 	{
 	    try {
 	    	Class.forName("org.sqlite.JDBC");
-	    	con = DriverManager.getConnection("jdbc:sqlite:plugins/xLogin/xlogin.db");
+	    	con = DriverManager.getConnection("jdbc:sqlite:plugins/xSignIn/xsignin.db");
 	    } catch ( Exception e )
 	    {
 	    	XUtil.severe("Can't open database");
