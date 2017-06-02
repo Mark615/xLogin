@@ -51,12 +51,14 @@ public class XSignIn extends JavaPlugin
 			XUtil.info("connected with xApi");
 		}
 		
+		XUtil.onEnable();
 		loadPlugin();
 	}
 
 	@Override
 	public void onDisable()
 	{
+		XUtil.onDisable();
 		for (Player p : Bukkit.getServer().getOnlinePlayers())
 		{
 			this.loginManager.unregisterPlayer(p);
