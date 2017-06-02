@@ -128,6 +128,7 @@ public class XUtil
 		catch(Exception e)
 		{
 			severe("Can't generate onEnable webrequest");
+			debug(e);
 		}
 		
 		checkUpdate();
@@ -142,6 +143,7 @@ public class XUtil
 		catch(Exception e)
 		{
 			severe("Can't generate onDisable webrequest");
+			debug(e);
 		}
 	}
 	
@@ -159,6 +161,7 @@ public class XUtil
 		catch(Exception e)
 		{
 			severe("Can't generate checkUpdate webrequest");
+			debug(e);
 		}
 	}
 	
