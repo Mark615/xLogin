@@ -111,6 +111,11 @@ public class SettingManager
     	return (config.getInt("login-message-intervall", 10) * 1000);
     }
     
+    public boolean hasCheckVersion()
+    {
+    	return config.getBoolean("updatecheck", true);
+    }
+    
 
 //---------Message section
     

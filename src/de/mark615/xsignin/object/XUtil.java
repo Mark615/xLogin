@@ -10,10 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import de.mark615.xsignin.SettingManager;
 import de.mark615.xsignin.XSignIn;
 
@@ -130,8 +126,6 @@ public class XUtil
 			severe("Can't generate onEnable webrequest");
 			debug(e);
 		}
-		
-		checkUpdate();
 	}
 	
 	public static void onDisable()
@@ -143,24 +137,6 @@ public class XUtil
 		catch(Exception e)
 		{
 			severe("Can't generate onDisable webrequest");
-			debug(e);
-		}
-	}
-	
-	private static void checkUpdate()
-	{
-		try
-		{
-		    JsonElement jsonelement = new JsonParser().parse(sendGet("checkversion?type=xSignIn&build=" + XSignIn.BUILD));
-		    JsonObject json = jsonelement.getAsJsonObject();
-			if (json.has("build") && json.get("build").getAsInt() > XSignIn.BUILD)
-			{
-				info("A newer version of xSignIn is avaible. V." + json.get("version").getAsString());
-			}
-		}
-		catch(Exception e)
-		{
-			severe("Can't generate checkUpdate webrequest");
 			debug(e);
 		}
 	}

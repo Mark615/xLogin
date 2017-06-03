@@ -16,6 +16,10 @@ import de.mark615.xapi.versioncheck.VersionCheck.XType;
 import de.mark615.xsignin.commands.CommandXSignIn;
 import de.mark615.xsignin.commands.XCommand;
 import de.mark615.xsignin.events.PlayerEvents;
+import de.mark615.xsignin.SettingManager;
+import de.mark615.xsignin.object.Updater;
+import de.mark615.xsignin.object.Updater.UpdateResult;
+import de.mark615.xsignin.object.Updater.UpdateType;
 import de.mark615.xsignin.object.XUtil;
 
 public class XSignIn extends JavaPlugin
@@ -52,6 +56,7 @@ public class XSignIn extends JavaPlugin
 		}
 		
 		XUtil.onEnable();
+		updateCheck();
 		loadPlugin();
 	}
 
@@ -72,6 +77,29 @@ public class XSignIn extends JavaPlugin
 			this.loginManager.registerPlayer(p);
 		}
 		events.messageAllPlayer();
+	}
+	
+	private void updateCheck()
+	{
+		if (SettingManager.getInstance().hasCheckVersion())
+		{
+			try
+			{
+				Updater updater = new Updater(this, 267923, this.getFile(), UpdateType.NO_DOWNLOAD, true);
+				if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
+				    XUtil.info("New version available! " + updater.getLatestName());
+				}
+			}
+			catch(Exception e)
+			{
+				XUtil.severe("Can't generate checkUpdate webrequest");
+			}
+		}
+	}
+
+	public static XSignIn getInstance()
+	{
+		return instance;
 	}
 	
 	
@@ -158,11 +186,6 @@ public class XSignIn extends JavaPlugin
 	public SettingManager getSettingManager()
 	{
 		return this.settings;
-	}
-
-	public static XSignIn getInstance()
-	{
-		return instance;
 	}
 	
 	public XApiConnector getAPI()
