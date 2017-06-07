@@ -13,10 +13,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.mark615.xapi.XApi;
 import de.mark615.xapi.versioncheck.VersionCheck;
 import de.mark615.xapi.versioncheck.VersionCheck.XType;
+import de.mark615.xsignin.commands.CommandXMaintanance;
 import de.mark615.xsignin.commands.CommandXSignIn;
 import de.mark615.xsignin.commands.XCommand;
-import de.mark615.xsignin.events.PlayerEvents;
-import de.mark615.xsignin.SettingManager;
+import de.mark615.xsignin.events.EventListener;
 import de.mark615.xsignin.object.Updater;
 import de.mark615.xsignin.object.Updater.UpdateResult;
 import de.mark615.xsignin.object.Updater.UpdateType;
@@ -24,7 +24,7 @@ import de.mark615.xsignin.object.XUtil;
 
 public class XSignIn extends JavaPlugin
 {
-	public static final int BUILD = 3;
+	public static final int BUILD = 4;
 	public static final String PLUGIN_NAME = "[xSignIn] ";
 	public static final String PLUGIN_NAME_SHORT = "[xSignIn] ";
 	
@@ -33,7 +33,8 @@ public class XSignIn extends JavaPlugin
 	private XApiConnector xapiconn = null;
 	private SettingManager settings = null;
 	private LoginManager loginManager = null;
-	private PlayerEvents events = null;
+	private EventListener events = null;
+	private boolean maintenanceMode = false;
 
 	private Map<String, XCommand> commands = null;
 
@@ -68,10 +69,12 @@ public class XSignIn extends JavaPlugin
 		{
 			this.loginManager.unregisterPlayer(p);
 		}
+		settings.saveConfig();
 	}
 	
 	public void loadPlugin()
 	{
+		maintenanceMode = settings.getConfig().getBoolean("maintenance", false);
 		for (Player p : Bukkit.getServer().getOnlinePlayers())
 		{
 			this.loginManager.registerPlayer(p);
@@ -108,13 +111,14 @@ public class XSignIn extends JavaPlugin
 
 	private void registerEvents()
 	{
-		events = new PlayerEvents(this);
+		events = new EventListener(this);
 		Bukkit.getServer().getPluginManager().registerEvents(events, this);
 	}
 	
 	private void registerCommands()
 	{
 		commands.put("xlogin", new CommandXSignIn(this));
+		commands.put("xmaintenance", new CommandXMaintanance(this));
 	}
 
 	private boolean setupXApi() 
@@ -201,5 +205,22 @@ public class XSignIn extends JavaPlugin
 	public LoginManager getLoginManager()
 	{
 		return loginManager;
+	}
+	
+	public boolean isMaintenanceMode()
+	{
+		return maintenanceMode;
+	}
+	
+	public void setMaintenanceMode(boolean value)
+	{
+		if (this.maintenanceMode == value)
+			return;
+		
+		this.maintenanceMode = value;
+		settings.getConfig().set("maintenance", value);
+		settings.saveConfig();
+		if (hasAPI())
+			getAPI().createMaintenanceModeSwitchEvent(value);
 	}
 }

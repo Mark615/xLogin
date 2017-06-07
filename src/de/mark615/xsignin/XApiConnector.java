@@ -39,5 +39,18 @@ public class XApiConnector extends XSignInApi
 	{
 		return this.plugin.getLoginManager().isPlayerLoggedIn(target);
 	}
+
+	@Override
+	public boolean isMaintenanceMode()
+	{
+		return this.plugin.isMaintenanceMode();
+	}
+
+	@Override
+	public boolean setMaintenanceMode(boolean value)
+	{
+		this.plugin.setMaintenanceMode(value);
+		return true;
+	}
 	
 }

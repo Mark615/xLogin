@@ -17,11 +17,11 @@ import de.mark615.xsignin.XSignIn;
 import de.mark615.xsignin.object.XPlayerSubject;
 import de.mark615.xsignin.object.XUtil;
 
-public class PlayerEvents implements Listener
+public class EventListener implements Listener
 {
 	private XSignIn plugin;
 
-	public PlayerEvents(XSignIn instance)
+	public EventListener(XSignIn instance)
 	{
 		this.plugin = instance;
 		registerTask();
@@ -32,7 +32,7 @@ public class PlayerEvents implements Listener
 	{
 		for (Player p : Bukkit.getServer().getOnlinePlayers())
 		{
-			plugin.getLoginManager().getPlayer(p.getUniqueId()).setLastMessage(0);
+			plugin.getLoginManager().getPlayer(p.getUniqueId()).setLastSigninInfo(0);
 		}
 	}
 	
@@ -40,8 +40,14 @@ public class PlayerEvents implements Listener
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e)
 	{
-		plugin.getLoginManager().getPlayer(e.getPlayer().getUniqueId()).setLastMessage(0);
 		this.plugin.getLoginManager().registerPlayer(e.getPlayer());
+		plugin.getLoginManager().getPlayer(e.getPlayer().getUniqueId()).setLastSigninInfo(0);
+		
+		if (plugin.isMaintenanceMode() && !e.getPlayer().hasPermission("xsignin.xmaintenance.join"))
+		{
+			e.getPlayer().kickPlayer(XUtil.getMessage("message.maintenance"));
+			return;
+		}
 	}
 	
 	@EventHandler
@@ -82,19 +88,23 @@ public class PlayerEvents implements Listener
 			e.setCancelled(true);
 	}
 	
+	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent e)
 	{
 		final Player p = e.getPlayer();
 		if (!checkLoggedIn(p))
 			e.setCancelled(true);
 	}
-	
+
+	@EventHandler
 	public void PlayerDropEvent(PlayerDropItemEvent e)
 	{
 		final Player p = e.getPlayer();
 		if (!checkLoggedIn(p))
 			e.setCancelled(true);
 	}
+	
+	
 	
 	private boolean checkLoggedIn(Player p)
 	{
@@ -116,18 +126,18 @@ public class PlayerEvents implements Listener
 				for (Player p : Bukkit.getServer().getOnlinePlayers())
 				{
 					XPlayerSubject subject = plugin.getLoginManager().getPlayer(p.getUniqueId());
-					if (System.currentTimeMillis() - subject.getLastMessage() > plugin.getSettingManager().getLoginMessageIntervall())
+					if (System.currentTimeMillis() - subject.getLastSigninInfo() > plugin.getSettingManager().getLoginMessageIntervall())
 					{
 						if (!plugin.getLoginManager().hasAccount(p))
 						{
 							XUtil.sendFileMessage(p, "message.register", true);
-							subject.setLastMessage(System.currentTimeMillis());
+							subject.setLastSigninInfo(System.currentTimeMillis());
 						}
 						else
 						if (!plugin.getLoginManager().isPlayerLoggedIn(p))
 						{
 							XUtil.sendFileMessage(p, "message.login", true);
-							subject.setLastMessage(System.currentTimeMillis());
+							subject.setLastSigninInfo(System.currentTimeMillis());
 						}
 					}
 				}

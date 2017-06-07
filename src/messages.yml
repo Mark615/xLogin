@@ -25,8 +25,24 @@ command:
         reset:
             description: 'reset Login account on the server'
             success: 'Your account has been reset'
+    xmaintenance:
+        enable:
+            description: 'Enable Maintenance Mode'
+            error: 'Server is already in Maintenance Mode'
+            success: 'Server Maintenance Mode is now on'
+        disable:
+            description: 'Disable Maintenance Mode'
+            error: 'Server is not in Maintenance Mode'
+            success: 'Server Maintenance Mode is now off'
+        clear:
+            description: 'Remove all players without permission from the server'
+            maintenance_kick: '&4The Server mode has switched to Maintenance &2please come back later.'
+            success: 'All not allowed Players are kicked from the server.'
+            error: 'Server is not in Maintenance Mode'
+        
 message:
     first-join: 'Has Joined For The First Time!'
     autorelog: '&2You have been relogged. Welcome back'
     register: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to register.%ln%&4use /xsignin register <pw> <pw>&f%ln%&8------------------------------'
     login: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to login.%ln%&4use /xsignin login <pw>&f%ln%&8------------------------------'
+    maintenance: '&4At the moment you can not join, the server is on maintenance mode'

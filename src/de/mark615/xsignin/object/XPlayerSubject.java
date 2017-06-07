@@ -13,7 +13,7 @@ public class XPlayerSubject
 	private String loginIP;
 	private long loginTime;
 	private long logoutTime;
-	private long lastMessage;
+	private long signinInfo;
 	private UUID uuid;
 	
 	public XPlayerSubject(UUID uuid)
@@ -23,7 +23,7 @@ public class XPlayerSubject
 		this.loginIP = "0.0.0.0";
 		this.loginTime = 0;
 		this.logoutTime = 0;
-		this.lastMessage = 0;
+		this.signinInfo = 0;
 	}
 	
 	public boolean isLoggedIn()
@@ -62,7 +62,7 @@ public class XPlayerSubject
 	{
 		this.loggedIN = false;
 		this.logoutTime = System.currentTimeMillis();
-		this.lastMessage = 0;
+		this.signinInfo = 0;
 	}
 	
 	public UUID getUUID()
@@ -90,13 +90,13 @@ public class XPlayerSubject
 		return loginIP;
 	}
 	
-	public long getLastMessage()
+	public long getLastSigninInfo()
 	{
-		return lastMessage;
+		return signinInfo;
 	}
 	
-	public void setLastMessage(long time)
+	public void setLastSigninInfo(long time)
 	{
-		this.lastMessage = time;
+		this.signinInfo = time;
 	}
 }
