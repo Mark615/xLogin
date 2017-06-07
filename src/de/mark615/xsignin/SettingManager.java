@@ -3,6 +3,7 @@ package de.mark615.xsignin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -24,6 +25,8 @@ public class SettingManager
     
     FileConfiguration message;
     File mFile;
+    
+    private int dataID;
    
     @SuppressWarnings("deprecation")
 	public void setup(Plugin p)
@@ -114,6 +117,31 @@ public class SettingManager
     public boolean hasCheckVersion()
     {
     	return config.getBoolean("updatecheck", true);
+    }
+    
+    public boolean isMaintenance()
+    {
+    	return config.getBoolean("maintenance", false);
+    }
+    
+    public void setAPIKey(UUID uuid)
+    {
+    	config.set("apikey", uuid.toString());
+    }
+    
+    public UUID getAPIKey()
+    {
+    	return config.getString("apikey", null) == null ? null : UUID.fromString(config.getString("apikey"));
+    }
+    
+    public void setDataID(int dataID)
+    {
+    	this.dataID = dataID;
+    }
+    
+    public int getDataID()
+    {
+    	return dataID;
     }
     
 
