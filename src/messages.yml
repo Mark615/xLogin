@@ -5,9 +5,9 @@ command:
     no-consol-command: 'This is a player command'
     wrong-pw: 'Password is wrong'
     not-match-rules: '&cPassword is''t matching the passwordrules'
-    not-match-DIGIT: '&cPassword is''t matching the passwordrules'
-    not-match-UPPERLOWER: '&cPassword is''t matching the passwordrules'
-    not-match-SPECIAL: '&cPassword is''t matching the passwordrules'
+    not-match-DIGIT: '&cPassword must contain a digit'
+    not-match-UPPERLOWER: '&cPassword must contain upper and lower character'
+    not-match-SPECIAL: '&cPassword must contain a special character'
     already-logged-in: 'You are logged in'
     xsignin:
         register:
@@ -32,10 +32,10 @@ command:
     xagb:
         accept:
             description: 'Accept the AGB'
-            success: '&2You accepted the AGB'
+            success: 'You accepted the AGB'
         decline:
             description: 'Decline the AGB'
-            error: '&4You need to accept the AGB to play here'
+            error: 'You need to accept the AGB to play here'
         show:
             description: 'Show AGB'
     xmaintenance:

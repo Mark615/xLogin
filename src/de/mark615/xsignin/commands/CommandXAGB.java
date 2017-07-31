@@ -58,7 +58,7 @@ public class CommandXAGB extends XCommand
 		if (matchesSubCommand("accept", args[0]))
 		{
 			plugin.getLoginManager().getAGBManager().setXPlayerAcceptAGB(target);
-			XUtil.sendFileMessage(target, "command.xagb.accept.success");
+			XUtil.sendFileMessage(target, "command.xagb.accept.success", ChatColor.GREEN);
 			return XCommandReturnType.SUCCESS;
 		}
 		
