@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.mark615.xapi.XApi;
 import de.mark615.xapi.versioncheck.VersionCheck;
 import de.mark615.xapi.versioncheck.VersionCheck.XType;
+import de.mark615.xsignin.commands.CommandXAGB;
 import de.mark615.xsignin.commands.CommandXMaintanance;
 import de.mark615.xsignin.commands.CommandXSignIn;
 import de.mark615.xsignin.commands.XCommand;
@@ -24,7 +25,7 @@ import de.mark615.xsignin.object.XUtil;
 
 public class XSignIn extends JavaPlugin
 {
-	public static final int BUILD = 4;
+	public static final int BUILD = 5;
 	public static final String PLUGIN_NAME = "[xSignIn] ";
 	public static final String PLUGIN_NAME_SHORT = "[xSignIn] ";
 	
@@ -119,6 +120,7 @@ public class XSignIn extends JavaPlugin
 	{
 		commands.put("xlogin", new CommandXSignIn(this));
 		commands.put("xmaintenance", new CommandXMaintanance(this));
+		commands.put("xagb", new CommandXAGB(this));
 	}
 
 	private boolean setupXApi() 
@@ -171,7 +173,7 @@ public class XSignIn extends JavaPlugin
 		
 		if (commandSender instanceof Player)
 		{
-			if (!((Player) commandSender).hasPermission(xCommand.getPermission()) || !xCommand.run((Player) commandSender, command, s, args))
+			if (!((Player) commandSender).hasPermission(xCommand.getPermission()) || !xCommand.runCommand((Player) commandSender, command, s, args))
 			{
 				commandSender.sendMessage(ChatColor.RED + XUtil.getMessage("command.nopermission"));
 				return true;
@@ -179,7 +181,7 @@ public class XSignIn extends JavaPlugin
 		}
 		else
 		{
-			if (!xCommand.run(commandSender, command, s, args))
+			if (!xCommand.runCommand(commandSender, command, s, args))
 			{
 				commandSender.sendMessage(ChatColor.RED + XUtil.getMessage("command.nopermission"));
 			}

@@ -1,7 +1,5 @@
 package de.mark615.xsignin;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +16,7 @@ public class LoginManager
 {
 	private XDatabase database = null;
 	private XSignIn plugin = null;
+	private AGBManager agbManager = null;
 	private Map<UUID, XPlayerSubject> player = null;
 	
 	public LoginManager(XSignIn plugin)
@@ -26,6 +25,8 @@ public class LoginManager
 		this.player = new HashMap<>();
 		this.database = new XDatabase();
 		database.isValid();
+		
+		this.agbManager = new AGBManager(plugin, database.getAGBDatabse());
 	}
 	
 	public void registerPlayer(Player target)
@@ -46,7 +47,7 @@ public class LoginManager
 		}
 		else
 		{
-			this.player.put(target.getUniqueId(), new XPlayerSubject(target.getUniqueId()));
+			this.player.put(target.getUniqueId(), database.loadXPlayerSubject(target.getUniqueId()));
 		}
 	}
 	
@@ -74,7 +75,7 @@ public class LoginManager
 
 		try
 		{
-			this.database.registerXPlayerSubject(player.get(target.getUUID()), passwordToHash(pw));
+			this.database.registerXPlayerSubject(player.get(target.getUUID()), XUtil.toHash(pw));
 			if (plugin.getSettingManager().hasFirstJoinMessage())
 			{
 				XUtil.sendFileMessage(target.getPlayer(), "message.first-join");
@@ -108,7 +109,7 @@ public class LoginManager
 		
 		try
 		{
-			database.setPlayerPassword(target.getUniqueId(), passwordToHash(pw));
+			database.setPlayerPassword(target.getUniqueId(), XUtil.toHash(pw));
 
 			if (this.plugin.hasAPI())
 				this.plugin.getAPI().createPlayerPasswordChangedEvent(target);
@@ -151,7 +152,7 @@ public class LoginManager
 		boolean result = false;
 		try
 		{
-			result = database.checkPassword(target.getUniqueId(), passwordToHash(pw));
+			result = database.checkPassword(target.getUniqueId(), XUtil.toHash(pw));
 		}
 		catch (SQLException e)
 		{
@@ -170,7 +171,7 @@ public class LoginManager
 		boolean result = false;
 		try
 		{
-			result = database.loginPlayer(target.getUniqueId(), passwordToHash(pw));
+			result = database.loginPlayer(target.getUniqueId(), XUtil.toHash(pw));
 		}
 		catch (SQLException e)
 		{
@@ -196,34 +197,21 @@ public class LoginManager
 		return database.hasPlayerAccount(target.getUniqueId());
 	}
 	
-	private String passwordToHash(String pw)
-	{
-		String hashtext = null;
-		byte[] bytesOfMessage;
-		try {
-			bytesOfMessage = pw.getBytes("UTF-8");
 	
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			byte[] thedigest = md.digest(bytesOfMessage);
-			
-			BigInteger number = new BigInteger(1, thedigest);
-			hashtext = number.toString(16);
-			
-			while (hashtext.length() < 32)
-			{
-				hashtext = "0" + hashtext;
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-		return hashtext;
-	}
+	
 	
 	public XPlayerSubject getPlayer(UUID uuid)
 	{
 		return player.get(uuid);
+	}
+	
+	public AGBManager getAGBManager()
+	{
+		return agbManager;
+	}
+	
+	public int getXPlayerSubjectID(UUID uuid)
+	{
+		return database.getXPlayerSubjectID(uuid);
 	}
 }

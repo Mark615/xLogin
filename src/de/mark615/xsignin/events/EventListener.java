@@ -32,7 +32,7 @@ public class EventListener implements Listener
 	{
 		for (Player p : Bukkit.getServer().getOnlinePlayers())
 		{
-			plugin.getLoginManager().getPlayer(p.getUniqueId()).setLastSigninInfo(0);
+			plugin.getLoginManager().getPlayer(p.getUniqueId()).setLastLoginInfo(0);
 		}
 	}
 	
@@ -41,7 +41,7 @@ public class EventListener implements Listener
 	public void onPlayerJoin(PlayerJoinEvent e)
 	{
 		this.plugin.getLoginManager().registerPlayer(e.getPlayer());
-		plugin.getLoginManager().getPlayer(e.getPlayer().getUniqueId()).setLastSigninInfo(0);
+		plugin.getLoginManager().getPlayer(e.getPlayer().getUniqueId()).setLastLoginInfo(0);
 		
 		if (plugin.isMaintenanceMode() && !e.getPlayer().hasPermission("xsignin.xmaintenance.join"))
 		{
@@ -108,12 +108,16 @@ public class EventListener implements Listener
 	
 	private boolean checkLoggedIn(Player p)
 	{
+		boolean value = false;
 		if (p != null)
 		{
 			if (this.plugin.getLoginManager().isPlayerLoggedIn(p))
-				return true;
+			{
+				if (this.plugin.getLoginManager().getAGBManager().hasXPlayerAcceptAGB(p))
+					value = true;
+			}
 		}
-		return false;
+		return value;
 	}
 	
 	private void registerTask()
@@ -126,18 +130,24 @@ public class EventListener implements Listener
 				for (Player p : Bukkit.getServer().getOnlinePlayers())
 				{
 					XPlayerSubject subject = plugin.getLoginManager().getPlayer(p.getUniqueId());
-					if (System.currentTimeMillis() - subject.getLastSigninInfo() > plugin.getSettingManager().getLoginMessageIntervall())
+					if (System.currentTimeMillis() - subject.getLastLoginInfo() > plugin.getSettingManager().getLoginMessageIntervall())
 					{
 						if (!plugin.getLoginManager().hasAccount(p))
 						{
 							XUtil.sendFileMessage(p, "message.register", true);
-							subject.setLastSigninInfo(System.currentTimeMillis());
+							subject.setLastLoginInfo(System.currentTimeMillis());
 						}
 						else
-						if (!plugin.getLoginManager().isPlayerLoggedIn(p))
+						if (!subject.isLoggedIn())
 						{
 							XUtil.sendFileMessage(p, "message.login", true);
-							subject.setLastSigninInfo(System.currentTimeMillis());
+							subject.setLastLoginInfo(System.currentTimeMillis());
+						}
+						else
+						if (!subject.hasAGBAccepted())
+						{
+							XUtil.sendFileMessage(p, "message.agb", true);
+							subject.setLastLoginInfo(System.currentTimeMillis());
 						}
 					}
 				}

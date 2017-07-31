@@ -9,21 +9,24 @@ import de.mark615.xsignin.XSignIn;
 
 public class XPlayerSubject
 {
+	private int DBID;
 	private boolean loggedIN;
+	private boolean agbaccepted;
 	private String loginIP;
 	private long loginTime;
 	private long logoutTime;
-	private long signinInfo;
+	private long lastloginInfo;
 	private UUID uuid;
 	
-	public XPlayerSubject(UUID uuid)
+	public XPlayerSubject(int dbid, UUID uuid)
 	{
 		this.loggedIN = false;
+		this.DBID = dbid;
 		this.uuid = uuid;
 		this.loginIP = "0.0.0.0";
 		this.loginTime = 0;
 		this.logoutTime = 0;
-		this.signinInfo = 0;
+		this.lastloginInfo = 0;
 	}
 	
 	public boolean isLoggedIn()
@@ -31,8 +34,22 @@ public class XPlayerSubject
 		return loggedIN;
 	}
 	
+	public void setAGBAccepted()
+	{
+		this.agbaccepted = true;
+	}
+	
 	public void logPlayerIn()
 	{
+		this.loggedIN = true;
+		this.loginIP = getPlayer().getAddress().getHostName();
+		this.loginTime = System.currentTimeMillis();
+		triggerLoginEvent();
+	}
+	
+	public void registerPlayer()
+	{
+		this.DBID = XSignIn.getInstance().getLoginManager().getXPlayerSubjectID(uuid);
 		this.loggedIN = true;
 		this.loginIP = getPlayer().getAddress().getHostName();
 		this.loginTime = System.currentTimeMillis();
@@ -62,7 +79,12 @@ public class XPlayerSubject
 	{
 		this.loggedIN = false;
 		this.logoutTime = System.currentTimeMillis();
-		this.signinInfo = 0;
+		this.lastloginInfo = 0;
+	}
+	
+	public int getDBID()
+	{
+		return DBID;
 	}
 	
 	public UUID getUUID()
@@ -90,13 +112,18 @@ public class XPlayerSubject
 		return loginIP;
 	}
 	
-	public long getLastSigninInfo()
+	public long getLastLoginInfo()
 	{
-		return signinInfo;
+		return lastloginInfo;
 	}
 	
-	public void setLastSigninInfo(long time)
+	public void setLastLoginInfo(long time)
 	{
-		this.signinInfo = time;
+		this.lastloginInfo = time;
+	}
+	
+	public boolean hasAGBAccepted()
+	{
+		return agbaccepted;
 	}
 }

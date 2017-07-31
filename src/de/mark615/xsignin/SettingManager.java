@@ -3,6 +3,7 @@ package de.mark615.xsignin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -46,7 +47,7 @@ public class SettingManager
 		InputStream defConfigStream = p.getResource("config.yml");
 		YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
 		config.setDefaults(defConfig);
-		
+		saveConfig();
         
         
         mFile = new File(p.getDataFolder(), "messages.yml");
@@ -94,6 +95,8 @@ public class SettingManager
     	config = YamlConfiguration.loadConfiguration(cFile);
     }
     
+    
+    
     public boolean hasFirstJoinMessage()
     {
     	return config.getBoolean("first-join-message", true);
@@ -123,6 +126,39 @@ public class SettingManager
     {
     	return config.getBoolean("maintenance", false);
     }
+    
+    public boolean isAGBEnbale()
+    {
+    	return config.getBoolean("agb.enable", false);
+    }
+    
+    public List<String> getAGBMessage()
+    {
+    	return config.getStringList("agb.message");
+    }
+    
+    public int needPasswordLength()
+    {
+    	return config.getInt("password.length", 0);
+    }
+    
+    public boolean needPasswordUpperAndLower()
+    {
+    	return config.getBoolean("password.upperAndLowerChar", false);
+    }
+    
+    public boolean needPasswordSpecialChar()
+    {
+    	return config.getBoolean("password.specialChar", false);
+    }
+    
+    public boolean needPasswordDigitChar()
+    {
+    	return config.getBoolean("password.digitChar", false);
+    }
+    
+    
+    
     
     public void setAPIKey(UUID uuid)
     {

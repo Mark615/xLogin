@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public class XDatabase
 {
+	private XAGBDatabase dbAGB;
 	private Connection con;
 	private Statement stmt;
 	
@@ -16,6 +17,7 @@ public class XDatabase
 	{
 		this.con = null;
 		this.stmt = null;
+		this.dbAGB = new XAGBDatabase(this);
 	}
 	
 	public boolean isValid()
@@ -33,6 +35,7 @@ public class XDatabase
 	    try
 	    {
 	    	loadDatabase();
+	    	dbAGB.loadDatabase(con);
 	    }
 	    catch (SQLException e)
 	    {
@@ -44,6 +47,7 @@ public class XDatabase
 	
 	private void loadDatabase() throws SQLException
 	{
+		//user database
 		stmt = con.createStatement();
 		stmt.execute("CREATE TABLE IF NOT EXISTS xuser (id INTEGER PRIMARY KEY, uuid TEXT not null, name TEXT not null, password TEXT not null, lastlogin INTEGER, lastlogout INTEGER, logincounter INTEGER)");
 		stmt.close();
@@ -57,6 +61,30 @@ public class XDatabase
 	public void unregisterXPlayerSubject(XPlayerSubject subject) throws SQLException
 	{
 		saveXPlayer(subject);
+	}
+	
+	public XPlayerSubject loadXPlayerSubject(UUID uuid)
+	{
+		XPlayerSubject subject = null;
+		try
+		{
+			stmt = con.createStatement();
+			ResultSet res = stmt.executeQuery("SELECT id, uuid FROM xuser WHERE uuid = '" + uuid.toString() + "'");
+			if (res.next())
+			{
+				subject = new XPlayerSubject(res.getInt("id"), uuid);
+			}
+			else
+			{
+				subject = new XPlayerSubject(0, uuid);
+			}
+			stmt.close();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return subject;
 	}
 	
 	public boolean hasPlayerAccount(UUID target)
@@ -151,4 +179,30 @@ public class XDatabase
 		stmt.execute("UPDATE xuser SET lastlogin = " + subject.getLoginTime() + ", lastlogout = " + subject.getLogoutTime() + " WHERE uuid = '" + subject.getUUID().toString() + "'");
 		stmt.close();
 	}
+	
+	public XAGBDatabase getAGBDatabse()
+	{
+		return dbAGB;
+	}
+	
+	public int getXPlayerSubjectID(UUID uuid)
+	{
+		int id = 0;
+		try
+		{
+			stmt = con.createStatement();
+			ResultSet res = stmt.executeQuery("SELECT id, uuid FROM xuser WHERE uuid = '" + uuid.toString() + "'");
+			if (res.next())
+			{
+				id = res.getInt("id");
+			}
+			stmt.close();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
 }

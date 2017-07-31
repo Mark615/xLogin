@@ -4,6 +4,10 @@ command:
     player-not-found: 'The Player can''t be found'
     no-consol-command: 'This is a player command'
     wrong-pw: 'Password is wrong'
+    not-match-rules: '&cPassword is''t matching the passwordrules'
+    not-match-DIGIT: '&cPassword is''t matching the passwordrules'
+    not-match-UPPERLOWER: '&cPassword is''t matching the passwordrules'
+    not-match-SPECIAL: '&cPassword is''t matching the passwordrules'
     already-logged-in: 'You are logged in'
     xsignin:
         register:
@@ -25,6 +29,15 @@ command:
         reset:
             description: 'reset Login account on the server'
             success: 'Your account has been reset'
+    xagb:
+        accept:
+            description: 'Accept the AGB'
+            success: '&2You accepted the AGB'
+        decline:
+            description: 'Decline the AGB'
+            error: '&4You need to accept the AGB to play here'
+        show:
+            description: 'Show AGB'
     xmaintenance:
         enable:
             description: 'Enable Maintenance Mode'
@@ -45,4 +58,5 @@ message:
     autorelog: '&2You have been relogged. Welcome back'
     register: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to register.%ln%&4use /xsignin register <pw> <pw>&f%ln%&8------------------------------'
     login: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to login.%ln%&4use /xsignin login <pw>&f%ln%&8------------------------------'
+    agb: '&8-----------&6[xagb]&8-----------%ln%&2Welcome on Server. If you want to player you need to accept the AGB first.%ln%&4use /xagb help&f%ln%&8------------------------------'
     maintenance: '&4At the moment you can not join, the server is on maintenance mode'

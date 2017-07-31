@@ -22,91 +22,80 @@ public class CommandXMaintanance extends XCommand
 	}
 
 	@Override
-	public void fillSubCommands(List<String> subcommands)
+	public void fillSubCommands(List<XSubCommand> subcommands)
 	{
-		subcommands.add("enable");
-		subcommands.add("disable");
-		subcommands.add("clear");
+		subcommands.add(new XSubCommand("enable"));
+		subcommands.add(new XSubCommand("disable"));
+		subcommands.add(new XSubCommand("clear"));
 	}
 
 	@Override
-	public boolean run(CommandSender sender, Command command, String s, String[] args)
+	public XCommandReturnType run(CommandSender sender, Command command, String s, String[] args)
 	{
-		if(args.length > 0)
+		if (!(sender instanceof Player))
 		{
-			if (args[0].equalsIgnoreCase("help") || args[0].equals("?"))
-			{
-				showHelp(sender);
-			}
-			
-			if (!(sender instanceof Player))
-			{
-				XUtil.sendFileMessage(sender, "command.no-consol-command");
-				return true;
-			}
-			
-			if (!this.containsSubCommand(args[0]))
-			{
-				XUtil.sendCommandUsage(sender, "use: /xmaintenance <help/?> " + ChatColor.YELLOW + "- for help");
-				return true;
-			}
-			
-			if (args[0].equalsIgnoreCase("enable"))
-			{
-				if (!matchPermission(sender, "xsignin.maintenance.admin"))
-					return false;
-				
-				if (this.plugin.isMaintenanceMode())
-				{
-					XUtil.sendCommandError(sender, XUtil.getMessage("command.xmaintenance.enable.error"));
-					return true;
-				}
-				
-				this.plugin.setMaintenanceMode(true);
-				XUtil.sendCommandInfo(sender, XUtil.getMessage("command.xmaintenance.enable.success"));
-				return true;
-			}
-			
-			if(args[0].equalsIgnoreCase("disable"))
-			{
-				if (!matchPermission(sender, "xsignin.maintenance.admin"))
-					return false;
-				
-				if (!this.plugin.isMaintenanceMode())
-				{
-					XUtil.sendCommandError(sender, XUtil.getMessage("command.xmaintenance.disable.error"));
-					return true;
-				}
-				
-				this.plugin.setMaintenanceMode(false);
-				XUtil.sendCommandInfo(sender, XUtil.getMessage("command.xmaintenance.disable.success"));
-				return true;
-			}
-			
-			if (args[0].equalsIgnoreCase("clear"))
-			{
-				if (!matchPermission(sender, "xsignin.maintenance.admin"))
-					return false;
-				
-				if (!this.plugin.isMaintenanceMode())
-				{
-					XUtil.sendCommandError(sender, XUtil.getMessage("command.xmaintenance.clear.error"));
-					return true;
-				}
-				
-				for (Player target : Bukkit.getServer().getOnlinePlayers())
-				{
-					target.kickPlayer(XUtil.getMessage("command.xmaintenance.clear.maintenance_kick"));
-				}
-				XUtil.sendCommandInfo(sender, XUtil.getMessage("command.xmaintenance.clear.success"));
-				return true;
-			}
+			XUtil.sendFileMessage(sender, "command.no-consol-command");
+			return XCommandReturnType.NEEDTOBEPLAYER;
 		}
-		else
+		
+		if (!this.isSubCommand(args[0]))
 		{
-			showHelp(sender);
+			XUtil.sendCommandUsage(sender, "use: /xmaintenance <help/?> " + ChatColor.YELLOW + "- for help");
+			return XCommandReturnType.NOCOMMAND;
 		}
-		return true;
+		
+		if (matchesSubCommand("enable", args[0]))
+		{
+			if (!matchPermission(sender, "xsignin.maintenance.admin"))
+				return XCommandReturnType.NOPERMISSION;
+			
+			if (this.plugin.isMaintenanceMode())
+			{
+				XUtil.sendCommandError(sender, XUtil.getMessage("command.xmaintenance.enable.error"));
+				return XCommandReturnType.NONE;
+			}
+			
+			this.plugin.setMaintenanceMode(true);
+			XUtil.sendCommandInfo(sender, XUtil.getMessage("command.xmaintenance.enable.success"));
+			return XCommandReturnType.SUCCESS;
+		}
+		
+		if(matchesSubCommand("disable", args[0]))
+		{
+			if (!matchPermission(sender, "xsignin.maintenance.admin"))
+				return XCommandReturnType.NOPERMISSION;
+			
+			if (!this.plugin.isMaintenanceMode())
+			{
+				XUtil.sendCommandError(sender, XUtil.getMessage("command.xmaintenance.disable.error"));
+				return XCommandReturnType.NONE;
+			}
+			
+			this.plugin.setMaintenanceMode(false);
+			XUtil.sendCommandInfo(sender, XUtil.getMessage("command.xmaintenance.disable.success"));
+			return XCommandReturnType.SUCCESS;
+		}
+		
+		if (matchesSubCommand("clear", args[0]))
+		{
+			if (!matchPermission(sender, "xsignin.maintenance.admin"))
+				return XCommandReturnType.NOPERMISSION;
+			
+			if (!this.plugin.isMaintenanceMode())
+			{
+				XUtil.sendCommandError(sender, XUtil.getMessage("command.xmaintenance.clear.error"));
+				return XCommandReturnType.NONE;
+			}
+			
+			for (Player target : Bukkit.getServer().getOnlinePlayers())
+			{
+				target.kickPlayer(XUtil.getMessage("command.xmaintenance.clear.maintenance_kick"));
+			}
+			XUtil.sendCommandInfo(sender, XUtil.getMessage("command.xmaintenance.clear.success"));
+			return XCommandReturnType.SUCCESS;
+		}
+		
+		return XCommandReturnType.NOCOMMAND;
 	}
 
 	@Override

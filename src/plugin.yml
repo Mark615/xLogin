@@ -1,6 +1,6 @@
 name: xSignIn
 main: de.mark615.xsignin.XSignIn
-version: 1.0.3
+version: 1.0.4
 description: Login Plugin
 author: Mark615
 
@@ -9,6 +9,11 @@ commands:
     description: xSignin command
     usage: /xsignin
     aliases: [xs, xl, xsignin]
+    default: op
+  xagb:
+    description: xAGB command
+    usage: /xagb
+    aliases: [agb]
     default: op
   xmaintenance:
     description: maintenance command

@@ -8,4 +8,20 @@ auto-relog-min: 5
 updatecheck: true
 
 maintenance: false
+
+password:
+    length: 5
+    digitChar: true
+    upperAndLowerChar: true
+    specialChar: true
+
+agb:
+    enable: true
+    message:
+    - '&7------------&5AGB&7------------'
+    - '&a Toastbrot'
+    - '&a Annanas'
+    - '&4 Dies das &2bla bla &4ist ok'
+    - '&7---------------------------'
+    
     

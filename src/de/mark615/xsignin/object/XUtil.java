@@ -2,8 +2,10 @@ package de.mark615.xsignin.object;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -20,6 +22,8 @@ import de.mark615.xsignin.XSignIn;
 
 public class XUtil
 {
+	private static boolean jsonMessage = false;
+	
 	public static void info(String info)
 	{
 		Bukkit.getLogger().info(XSignIn.PLUGIN_NAME + info);
@@ -127,29 +131,107 @@ public class XUtil
 	
 	public static void sendMessage(Player p, String info)
 	{
-		sendMessage(p, info);
+		sendMessage(p, info, false);
 	}
+	
+	public static String toHash(String pw)
+	{
+		String hashtext = null;
+		byte[] bytesOfMessage;
+		try {
+			bytesOfMessage = pw.getBytes("UTF-8");
+	
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] thedigest = md.digest(bytesOfMessage);
+			
+			BigInteger number = new BigInteger(1, thedigest);
+			hashtext = number.toString(16);
+			
+			while (hashtext.length() < 32)
+			{
+				hashtext = "0" + hashtext;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		return hashtext;
+	}
+	
+	public static PassMatch matchPasswordRules(String password)
+	{
+	    /*
+	    ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$
+
+	    Explanation:
+
+	    ^                 # start-of-string
+	    (?=.*[0-9])       # a digit must occur at least once
+	    (?=.*[a-z])       # a lower case letter must occur at least once
+	    (?=.*[A-Z])       # an upper case letter must occur at least once
+	    (?=.*[@#$%^&+=])  # a special character must occur at least once
+	    (?=\\S+$)          # no whitespace allowed in the entire string
+	    .{8,}             # anything, at least eight places though
+	    $                 # end-of-string*/
+		
+	    if (password == null)
+	    	return PassMatch.ERROR;
+	    
+	    if (SettingManager.getInstance().needPasswordUpperAndLower())
+	    {
+	    	if (!password.matches(".*[a-zA-Z]+.*"))
+	    		return PassMatch.UPPERLOWER;
+	    }
+	    if (SettingManager.getInstance().needPasswordDigitChar())
+	    {
+	    	if (!password.matches(".*[0-9]+.*"))
+	    		return PassMatch.DIGIT;
+	    }
+	    if (SettingManager.getInstance().needPasswordSpecialChar())
+	    {
+	    	if (!password.matches(".*[!?@#$%^§&+=\\-*\\/<>\\[\\]|{}]+.*"))
+	    		return PassMatch.SPECIAL;
+	    }
+	    return PassMatch.OK;
+	}
+	
+	
+	
+	
 	
 	public static void onEnable()
 	{
-		if (onStart())
+		if (!jsonMessage)
+			return;
+		
+		Bukkit.getServer().getScheduler().runTaskAsynchronously(XSignIn.getInstance(), new Runnable()
 		{
-			try
+			@Override
+			public void run()
 			{
-				String value = sendGet("setmode?uuid=" + SettingManager.getInstance().getAPIKey().toString() + "&type=xSignIn&mode=on&build=" + XSignIn.BUILD);
-				JsonElement parser = new JsonParser().parse(value);
-				JsonObject json = parser.getAsJsonObject();
-				if (json.has("dataid"))
+				if (onStart())
 				{
-					SettingManager.getInstance().setDataID(json.get("dataid").getAsInt());
-				}
+					try
+					{
+						String value = sendGet("setmode?uuid=" + SettingManager.getInstance().getAPIKey().toString() + "&type=xSignIn&mode=on&build=" + XSignIn.BUILD);
+						JsonElement parser = new JsonParser().parse(value);
+						JsonObject json = parser.getAsJsonObject();
+						if (json.has("dataid"))
+						{
+							SettingManager.getInstance().setDataID(json.get("dataid").getAsInt());
+						}
+					}
+					catch(Exception e)
+					{
+						severe("Can't generate onEnable webrequest");
+						debug(e);
+					}
+				}				
 			}
-			catch(Exception e)
-			{
-				severe("Can't generate onEnable webrequest");
-				debug(e);
-			}
-		}
+		});
+		
 	}
 	
 	private static boolean onStart()
@@ -198,6 +280,9 @@ public class XUtil
 	
 	public static void onDisable()
 	{
+		if (!jsonMessage)
+			return;
+		
 		try
 		{
 			sendGet("setmode?uuid=" + SettingManager.getInstance().getAPIKey().toString() + "&dataid=" + SettingManager.getInstance().getDataID() + "&" + 
@@ -214,6 +299,7 @@ public class XUtil
 	private static String sendGet(String message) throws Exception {
 
 		String url = "http://134.255.217.210:8080/";
+		//String url = "http://localhost:8080/";
 
 		URL obj = new URL(url + message);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -235,5 +321,14 @@ public class XUtil
 		in.close();
 
 		return response.toString();
+	}
+	
+	public enum PassMatch
+	{
+		OK,
+		ERROR,
+		DIGIT,
+		SPECIAL,
+		UPPERLOWER
 	}
 }
