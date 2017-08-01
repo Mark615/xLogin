@@ -1,4 +1,4 @@
-package de.mark615.xsignin.object;
+package de.mark615.xsignin.database;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import de.mark615.xsignin.SettingManager;
+import de.mark615.xsignin.object.XUtil;
 
 public class XAGBDatabase
 {

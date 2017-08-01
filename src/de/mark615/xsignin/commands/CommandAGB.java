@@ -11,13 +11,13 @@ import de.mark615.xsignin.SettingManager;
 import de.mark615.xsignin.XSignIn;
 import de.mark615.xsignin.object.XUtil;
 
-public class CommandXAGB extends XCommand
+public class CommandAGB extends XCommand
 {
 	private final XSignIn plugin;
 
-	public CommandXAGB(XSignIn plugin)
+	public CommandAGB(XSignIn plugin)
 	{
-		super("xagb", "");
+		super("agb", "");
 		this.plugin = plugin;
 	}
 
