@@ -11,13 +11,13 @@ import org.bukkit.entity.Player;
 import de.mark615.xsignin.XSignIn;
 import de.mark615.xsignin.object.XUtil;
 
-public class CommandXMaintanance extends XCommand
+public class CommandMaintanance extends XCommand
 {
 	private XSignIn plugin;
 	
-	public CommandXMaintanance(XSignIn plugin)
+	public CommandMaintanance(XSignIn plugin)
 	{
-		super("xmaintenance", "xsignin.maintenance.admin");
+		super("maintenance", "xsignin.maintenance.admin");
 		this.plugin = plugin;
 	}
 
@@ -30,14 +30,18 @@ public class CommandXMaintanance extends XCommand
 	}
 
 	@Override
-	public XCommandReturnType run(CommandSender sender, Command command, String s, String[] args)
+	protected void showHelp(CommandSender p)
 	{
-		if (!(sender instanceof Player))
-		{
-			XUtil.sendFileMessage(sender, "command.no-consol-command");
-			return XCommandReturnType.NEEDTOBEPLAYER;
-		}
-		
+		boolean permission = matchPermission(p, "xsignin.maintenance.admin"); 
+		p.sendMessage(ChatColor.GREEN + XSignIn.PLUGIN_NAME + ChatColor.GRAY + " - " + ChatColor.YELLOW + XUtil.getMessage("command.description"));
+		if(permission) p.sendMessage(ChatColor.GREEN + "/xmt enable" + ChatColor.YELLOW + " - " + XUtil.getMessage("command.xmaintenance.enable.description"));
+		if(permission) p.sendMessage(ChatColor.GREEN + "/xmt disable" + ChatColor.YELLOW + " - " + XUtil.getMessage("command.xmaintenance.disable.description"));
+		if(permission) p.sendMessage(ChatColor.GREEN + "/xmt clear" + ChatColor.YELLOW + " - " + XUtil.getMessage("command.xmaintenance.clear.description"));
+	}
+
+	@Override
+	public XCommandReturnType run(CommandSender sender, Command command, String s, String[] args)
+	{		
 		if (!this.isSubCommand(args[0]))
 		{
 			XUtil.sendCommandUsage(sender, "use: /xmaintenance <help/?> " + ChatColor.YELLOW + "- for help");
@@ -96,16 +100,6 @@ public class CommandXMaintanance extends XCommand
 		}
 		
 		return XCommandReturnType.NOCOMMAND;
-	}
-
-	@Override
-	protected void showHelp(CommandSender p)
-	{
-		boolean permission = matchPermission(p, "xsignin.maintenance.admin"); 
-		p.sendMessage(ChatColor.GREEN + XSignIn.PLUGIN_NAME + ChatColor.GRAY + " - " + ChatColor.YELLOW + XUtil.getMessage("command.description"));
-		if(permission) p.sendMessage(ChatColor.GREEN + "/xmt enable" + ChatColor.YELLOW + " - " + XUtil.getMessage("command.xmaintenance.enable.description"));
-		if(permission) p.sendMessage(ChatColor.GREEN + "/xmt disable" + ChatColor.YELLOW + " - " + XUtil.getMessage("command.xmaintenance.disable.description"));
-		if(permission) p.sendMessage(ChatColor.GREEN + "/xmt clear" + ChatColor.YELLOW + " - " + XUtil.getMessage("command.xmaintenance.clear.description"));
 	}
 	
 }
