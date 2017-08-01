@@ -81,13 +81,16 @@ public class CommandXSignIn extends XCommand
 				return XCommandReturnType.NONE;
 			}
 			
-			PassMatch passmatch = XUtil.matchPasswordRules(args[1]);
-			if (!passmatch.equals(PassMatch.OK))
+			if (this.plugin.getLoginManager().checkPlayerPassword(target, args[1]))
 			{
-				XUtil.sendFileMessage(target, "command.not-match-rules", ChatColor.RED);
-				XUtil.sendFileMessage(target, "command.not-match-" + passmatch, ChatColor.RED);
-				XUtil.sendCommandUsage(sender, "use: /xsignin change <oldpw> <newpw> " + ChatColor.YELLOW + "- for changing Password");
-				return XCommandReturnType.NONE;
+				PassMatch passmatch = XUtil.matchPasswordRules(args[1]);
+				if (!passmatch.equals(PassMatch.OK))
+				{
+					XUtil.sendFileMessage(target, "command.not-match-rules", ChatColor.RED);
+					XUtil.sendFileMessage(target, "command.not-match-" + passmatch, ChatColor.RED);
+					XUtil.sendCommandUsage(sender, "use: /xsignin change <oldpw> <newpw> " + ChatColor.YELLOW + "- for changing Password");
+					return XCommandReturnType.NONE;
+				}
 			}
 			
 			if (!this.plugin.getLoginManager().loginPlayer(target, args[1]))
