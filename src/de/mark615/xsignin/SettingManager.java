@@ -1,8 +1,9 @@
 package de.mark615.xsignin;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,39 +30,49 @@ public class SettingManager
     
     private int dataID;
    
-    @SuppressWarnings("deprecation")
 	public void setup(Plugin p)
     {
     	if (!p.getDataFolder().exists())
     		p.getDataFolder().mkdir();
-    	
+
+    	//load config
     	cFile = new File(p.getDataFolder(), "config.yml");
     	if(!cFile.exists())
     		p.saveResource("config.yml", true);
-
-		//Store it
 		config = YamlConfiguration.loadConfiguration(cFile);
 		config.options().copyDefaults(true);
 		
-		//Load default messages
-		InputStream defConfigStream = p.getResource("config.yml");
-		YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-		config.setDefaults(defConfig);
-		saveConfig();
+		//Load default config
+		try
+		{
+			BufferedReader br = new BufferedReader(new InputStreamReader(p.getResource("config.yml"), "UTF-8"));
+			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(br);
+			config.setDefaults(defConfig);	
+		}
+		catch(Exception e)
+		{
+			XUtil.severe("cant copy default config.yml", e);
+		}
         
-        
+		
+        //load message
         mFile = new File(p.getDataFolder(), "messages.yml");
         if(!mFile.exists())
 			p.saveResource("messages.yml", true);
-		
-		//Store it
 		message = YamlConfiguration.loadConfiguration(mFile);
 		message.options().copyDefaults(true);
 		
 		//Load default messages
-		InputStream defMessageStream = p.getResource("messages.yml");
-		YamlConfiguration defMessages = YamlConfiguration.loadConfiguration(defMessageStream);
-		message.setDefaults(defMessages);
+		try
+		{
+			BufferedReader br = new BufferedReader(new InputStreamReader(p.getResource("messages.yml"), "UTF-8"));
+			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(br);
+			message.setDefaults(defConfig);	
+		}
+		catch(Exception e)
+		{
+			XUtil.severe("cant copy default message.yml", e);
+		}
 		try
 		{
 			message.save(mFile);
@@ -132,6 +143,11 @@ public class SettingManager
     	return config.getBoolean("agb.enable", false);
     }
     
+    public void setAGBEnabled(boolean value)
+    {
+    	config.set("agb.enable", value);
+    }
+    
     public List<String> getAGBMessage()
     {
     	return config.getStringList("agb.message");
@@ -156,6 +172,26 @@ public class SettingManager
     {
     	return config.getBoolean("password.digitChar", false);
     }
+	
+	public boolean isWhitelist()
+	{
+    	return config.getBoolean("whitelist", false);
+	}
+	
+	public boolean isBlacklist()
+	{
+    	return config.getBoolean("blacklist", false);
+	}
+	
+	public void setWhitelist(boolean value)
+	{
+		config.set("whitelist", value);
+	}
+	
+	public void setBlacklist(boolean value)
+	{
+		config.set("blacklist", value);
+	}
     
     
     

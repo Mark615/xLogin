@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import de.mark615.xsignin.object.XDatabase;
+import de.mark615.xsignin.database.XDatabase;
 import de.mark615.xsignin.object.XPlayerSubject;
 import de.mark615.xsignin.object.XUtil;
 
@@ -17,6 +17,7 @@ public class LoginManager
 	private XDatabase database = null;
 	private XSignIn plugin = null;
 	private AGBManager agbManager = null;
+	private ListManager listManager = null;
 	private Map<UUID, XPlayerSubject> player = null;
 	
 	public LoginManager(XSignIn plugin)
@@ -27,6 +28,7 @@ public class LoginManager
 		database.isValid();
 		
 		this.agbManager = new AGBManager(plugin, database.getAGBDatabse());
+		this.listManager = new ListManager(plugin, database.getWBLDatabase());
 	}
 	
 	public void registerPlayer(Player target)
@@ -49,19 +51,23 @@ public class LoginManager
 		{
 			this.player.put(target.getUniqueId(), database.loadXPlayerSubject(target.getUniqueId()));
 		}
+		
+		this.player.get(target.getUniqueId()).hasAGBAccepted();
 	}
 	
 	public void unregisterPlayer(Player target)
 	{
-		this.player.get(target.getUniqueId()).logPlayerOut();
-		try
+		if (this.player.get(target.getUniqueId()) != null)
 		{
-			this.database.unregisterXPlayerSubject(player.get(target.getUniqueId()));
-		}
-		catch (SQLException e)
-		{
-			XUtil.severe("Database error");
-			XUtil.severe(e.getMessage());
+			try
+			{
+				this.player.get(target.getUniqueId()).logPlayerOut();
+				this.database.unregisterXPlayerSubject(player.get(target.getUniqueId()));
+			}
+			catch (SQLException e)
+			{
+				XUtil.severe("Database error", e);
+			}
 		}
 	}
 	
@@ -171,7 +177,7 @@ public class LoginManager
 		boolean result = false;
 		try
 		{
-			result = database.loginPlayer(target.getUniqueId(), XUtil.toHash(pw));
+			result = database.loginPlayer(target, XUtil.toHash(pw));
 		}
 		catch (SQLException e)
 		{
@@ -208,6 +214,11 @@ public class LoginManager
 	public AGBManager getAGBManager()
 	{
 		return agbManager;
+	}
+	
+	public ListManager getListManager()
+	{
+		return listManager;
 	}
 	
 	public int getXPlayerSubjectID(UUID uuid)

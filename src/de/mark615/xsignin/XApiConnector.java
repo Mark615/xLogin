@@ -1,8 +1,11 @@
 package de.mark615.xsignin;
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
 
 import de.mark615.xapi.interfaces.XSignInApi;
+import de.mark615.xsignin.ListManager.ListType;
 
 public class XApiConnector extends XSignInApi
 {
@@ -51,6 +54,111 @@ public class XApiConnector extends XSignInApi
 	{
 		this.plugin.setMaintenanceMode(value);
 		return true;
+	}
+
+	@Override
+	public List<String> getAGB()
+	{
+		return SettingManager.getInstance().getAGBMessage();
+	}
+
+	@Override
+	public boolean isBlacklist()
+	{
+		return this.plugin.getLoginManager().getListManager().isBlacklist();
+	}
+
+	@Override
+	public boolean isWhitelist()
+	{
+		return this.plugin.getLoginManager().getListManager().isWhitelist();
+	}
+
+	@Override
+	public void setAGB(boolean arg0)
+	{
+		SettingManager.getInstance().setAGBEnabled(arg0);
+		SettingManager.getInstance().saveConfig();
+		this.plugin.getLoginManager().getAGBManager().refreshAGBState();
+	}
+
+	@Override
+	public void setBlacklist(boolean value)
+	{
+		this.plugin.getLoginManager().getListManager().setBlacklist(value);
+	}
+
+	@Override
+	public void setWhitelist(boolean value)
+	{
+		this.plugin.getLoginManager().getListManager().setWhitelist(value);
+	}
+
+	@Override
+	public boolean addElementToBlacklist(String value, String typeValue)
+	{
+		ListType type = hasListType(typeValue);
+		if (type == null)
+			return false;
+		
+		if (this.plugin.getLoginManager().getListManager().containsBlacklistElement(value, type))
+			return true;
+		
+		this.plugin.getLoginManager().getListManager().addBlacklistElement(typeValue, type);
+		return true;
+	}
+
+	@Override
+	public boolean addElementToWhitelist(String value, String typeValue)
+	{
+		ListType type = hasListType(typeValue);
+		if (type == null)
+			return false;
+		
+		if (this.plugin.getLoginManager().getListManager().containsWhitelistElement(value, type))
+			return true;
+		
+		this.plugin.getLoginManager().getListManager().addWhitelistElement(typeValue, type);
+		return true;
+	}
+
+	@Override
+	public boolean removeElementToBlacklist(String value, String typeValue)
+	{
+		ListType type = hasListType(typeValue);
+		if (type == null)
+			return false;
+		
+		this.plugin.getLoginManager().getListManager().removeBlacklistElement(typeValue, type);
+		return true;
+	}
+
+	@Override
+	public boolean removeElementToWhitelist(String value, String typeValue)
+	{
+		ListType type = hasListType(typeValue);
+		if (type == null)
+			return false;
+		
+		this.plugin.getLoginManager().getListManager().removeWhitelistElement(typeValue, type);
+		return true;
+	}
+	
+	private ListType hasListType(String type)
+	{
+		ListType result = null;
+		try
+		{
+			result = ListType.valueOf(type);
+			if (result == null)
+				return null;
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+		
+		return result;
 	}
 	
 }

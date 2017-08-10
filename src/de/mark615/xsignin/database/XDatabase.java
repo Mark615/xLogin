@@ -1,4 +1,4 @@
-package de.mark615.xsignin.object;
+package de.mark615.xsignin.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,9 +7,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
+import de.mark615.xsignin.object.XPlayerSubject;
+import de.mark615.xsignin.object.XUtil;
+
 public class XDatabase
 {
 	private XAGBDatabase dbAGB;
+	private XWBLDatabase dbWBL;
 	private Connection con;
 	private Statement stmt;
 	
@@ -18,6 +24,7 @@ public class XDatabase
 		this.con = null;
 		this.stmt = null;
 		this.dbAGB = new XAGBDatabase(this);
+		this.dbWBL = new XWBLDatabase(this);
 	}
 	
 	public boolean isValid()
@@ -36,6 +43,7 @@ public class XDatabase
 	    {
 	    	loadDatabase();
 	    	dbAGB.loadDatabase(con);
+	    	dbWBL.loadDatabase(con);
 	    }
 	    catch (SQLException e)
 	    {
@@ -138,11 +146,11 @@ public class XDatabase
 		return result;
 	}
 	
-	public boolean loginPlayer(UUID target, String pw) throws SQLException
+	public boolean loginPlayer(Player target, String pw) throws SQLException
 	{
 		boolean result = false;
 		stmt = con.createStatement();
-		ResultSet res = stmt.executeQuery("SELECT uuid, name, password from xuser where uuid = '" + target.toString() + "'");
+		ResultSet res = stmt.executeQuery("SELECT uuid, name, password from xuser where uuid = '" + target.getUniqueId().toString() + "'");
 		if (res.next())
 		{
 			if (res.getString("password").equals(pw))
@@ -155,8 +163,9 @@ public class XDatabase
 		{
 			stmt = con.createStatement();
 			stmt.execute("UPDATE xuser set lastlogin = " + System.currentTimeMillis() + ", " +
-					"logincounter = ((SELECT logincounter FROM xuser WHERE uuid = '" + target.toString() + "') + 1) " +
-					"WHERE uuid = '" + target.toString() + "'");
+					"logincounter = ((SELECT logincounter FROM xuser WHERE uuid = '" + target.getUniqueId().toString() + "') + 1), " +
+					"name = '" + target.getName() + "' " + 
+					"WHERE uuid = '" + target.getUniqueId().toString() + "'");
 			stmt.close();
 		}
 		
@@ -180,9 +189,16 @@ public class XDatabase
 		stmt.close();
 	}
 	
+	
+	
 	public XAGBDatabase getAGBDatabse()
 	{
 		return dbAGB;
+	}
+	
+	public XWBLDatabase getWBLDatabase()
+	{
+		return dbWBL;
 	}
 	
 	public int getXPlayerSubjectID(UUID uuid)

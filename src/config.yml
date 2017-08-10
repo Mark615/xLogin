@@ -8,6 +8,8 @@ auto-relog-min: 5
 updatecheck: true
 
 maintenance: false
+whitelist: false
+blacklist: false
 
 password:
     length: 5

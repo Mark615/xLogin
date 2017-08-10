@@ -13,19 +13,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.mark615.xapi.XApi;
 import de.mark615.xapi.versioncheck.VersionCheck;
 import de.mark615.xapi.versioncheck.VersionCheck.XType;
-import de.mark615.xsignin.commands.CommandXAGB;
-import de.mark615.xsignin.commands.CommandXMaintanance;
+import de.mark615.xsignin.commands.CommandAGB;
+import de.mark615.xsignin.commands.CommandBlacklist;
+import de.mark615.xsignin.commands.CommandMaintanance;
+import de.mark615.xsignin.commands.CommandWhitelist;
 import de.mark615.xsignin.commands.CommandXSignIn;
 import de.mark615.xsignin.commands.XCommand;
 import de.mark615.xsignin.events.EventListener;
-import de.mark615.xsignin.object.Updater;
-import de.mark615.xsignin.object.Updater.UpdateResult;
-import de.mark615.xsignin.object.Updater.UpdateType;
 import de.mark615.xsignin.object.XUtil;
 
 public class XSignIn extends JavaPlugin
 {
-	public static final int BUILD = 5;
+	public static final int BUILD = 6;
 	public static final String PLUGIN_NAME = "[xSignIn] ";
 	public static final String PLUGIN_NAME_SHORT = "[xSignIn] ";
 	
@@ -58,8 +57,9 @@ public class XSignIn extends JavaPlugin
 		}
 		
 		XUtil.onEnable();
-		updateCheck();
+		XUtil.updateCheck(this);
 		loadPlugin();
+		XUtil.info("Enabled Build " + BUILD);
 	}
 
 	@Override
@@ -82,24 +82,6 @@ public class XSignIn extends JavaPlugin
 		}
 		events.messageAllPlayer();
 	}
-	
-	private void updateCheck()
-	{
-		if (SettingManager.getInstance().hasCheckVersion())
-		{
-			try
-			{
-				Updater updater = new Updater(this, 267923, this.getFile(), UpdateType.NO_DOWNLOAD, true);
-				if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
-				    XUtil.info("New version available! " + updater.getLatestName());
-				}
-			}
-			catch(Exception e)
-			{
-				XUtil.severe("Can't generate checkUpdate webrequest");
-			}
-		}
-	}
 
 	public static XSignIn getInstance()
 	{
@@ -118,9 +100,11 @@ public class XSignIn extends JavaPlugin
 	
 	private void registerCommands()
 	{
-		commands.put("xlogin", new CommandXSignIn(this));
-		commands.put("xmaintenance", new CommandXMaintanance(this));
-		commands.put("xagb", new CommandXAGB(this));
+		commands.put("xsignin", new CommandXSignIn(this));
+		commands.put("maintenance", new CommandMaintanance(this));
+		commands.put("agb", new CommandAGB(this));
+		commands.put("whitelist", new CommandWhitelist(this));
+		commands.put("blacklist", new CommandBlacklist(this));
 	}
 
 	private boolean setupXApi() 

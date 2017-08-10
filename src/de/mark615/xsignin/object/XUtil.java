@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -19,6 +20,8 @@ import com.google.gson.JsonParser;
 
 import de.mark615.xsignin.SettingManager;
 import de.mark615.xsignin.XSignIn;
+import de.mark615.xsignin.object.Updater.UpdateResult;
+import de.mark615.xsignin.object.Updater.UpdateType;
 
 public class XUtil
 {
@@ -37,6 +40,12 @@ public class XUtil
 	public static void severe(String severe)
 	{
 		Bukkit.getLogger().severe(XSignIn.PLUGIN_NAME + severe);
+	}
+	
+	public static void severe(String severe, Exception e)
+	{
+		severe(severe);
+		e.printStackTrace();
 	}
 	
 	public static void debug(Exception e)
@@ -179,6 +188,11 @@ public class XUtil
 	    if (password == null)
 	    	return PassMatch.ERROR;
 	    
+	    if (SettingManager.getInstance().needPasswordLength() != -1)
+	    {
+	    	if (password.length() < SettingManager.getInstance().needPasswordLength())
+	    		return PassMatch.LENGTH;
+	    }
 	    if (SettingManager.getInstance().needPasswordUpperAndLower())
 	    {
 	    	if (!password.matches(".*[a-zA-Z]+.*"))
@@ -196,8 +210,33 @@ public class XUtil
 	    }
 	    return PassMatch.OK;
 	}
+
 	
 	
+	public static void updateCheck(final JavaPlugin plugin)
+	{
+		Bukkit.getServer().getScheduler().runTaskTimer(plugin, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (SettingManager.getInstance().hasCheckVersion())
+				{
+					try
+					{
+						Updater updater = new Updater(plugin, 267923, plugin.getDataFolder(), UpdateType.NO_DOWNLOAD, true);
+						if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
+						    XUtil.info("New version available! " + updater.getLatestName());
+						}
+					}
+					catch(Exception e)
+					{
+						XUtil.severe("Can't check version at Bukkit.com");
+					}
+				}
+			}
+		}, 20, 6 * 60 * 60 * 20);
+	}	
 	
 	
 	
@@ -329,6 +368,7 @@ public class XUtil
 		ERROR,
 		DIGIT,
 		SPECIAL,
-		UPPERLOWER
+		UPPERLOWER,
+		LENGTH
 	}
 }

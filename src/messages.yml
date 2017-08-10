@@ -3,12 +3,13 @@ command:
     nopermission: 'You don''t have permissions to run this command'
     player-not-found: 'The Player can''t be found'
     no-consol-command: 'This is a player command'
+    already-logged-in: 'You are logged in'
     wrong-pw: 'Password is wrong'
-    not-match-rules: '&cPassword is''t matching the passwordrules'
+    not-match-rules: '&cPassword isn''t matching the passwordrules'
     not-match-DIGIT: '&cPassword must contain a digit'
     not-match-UPPERLOWER: '&cPassword must contain upper and lower character'
     not-match-SPECIAL: '&cPassword must contain a special character'
-    already-logged-in: 'You are logged in'
+    not-match-LENGTH: '&cPassword isn''t long enogth'
     xsignin:
         register:
             description: 'Login to you account'
@@ -52,6 +53,51 @@ command:
             maintenance_kick: '&4The Server mode has switched to Maintenance &2please come back later.'
             success: 'All not allowed Players are kicked from the server.'
             error: 'Server is not in Maintenance Mode'
+    whitelist:
+        enable:
+            description: 'Enable Whitelist'
+            success: 'Whitelist enabled'
+        disbale:
+            description: 'Disable Whitelist'
+            success: 'Whitelist disabled'
+        add:
+            description: 'Add element to list'
+            success: '%value% added to whitelist'
+            on-list: 'Element is already in whitelist'
+            error: 'unable to add element to whitelist'
+        remove:
+            description: 'Remove element from list'
+            success: '%value% removed from whitelist'
+            not-on-list: 'Element is not whitelisted'
+        list:
+            description: 'Show all elements'
+        check:
+            description: 'Check if player is in list'
+            on-list: '%player% is on whitelist'
+            not-on-list: '%player% is not listed at the whitelist'
+    blacklist:
+        enable:
+            description: 'Enable Blacklist'
+            success: 'Blacklist enabled'
+        disbale:
+            description: 'Disable Blacklist'
+            success: 'Blacklist disabled'
+        add:
+            description: 'Add element to list'
+            success: '%value% added to blacklist'
+            on-list: 'Element is already in blacklist'
+            error: 'unable to add element to blacklist'
+        remove:
+            description: 'Remove element from list'
+            success: '%value% removed from blacklist'
+            not-on-list: 'Element is not blacklisted'
+        list:
+            description: 'Show all elements'
+        check:
+            description: 'Check if player is in list'
+            on-list: '%player% is on blacklist'
+            not-on-list: '%player% is not listed at the blacklist'
+        
         
 message:
     first-join: 'Has Joined For The First Time!'
@@ -59,4 +105,6 @@ message:
     register: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to register.%ln%&4use /xsignin register <pw> <pw>&f%ln%&8------------------------------'
     login: '&8-----------&6[xlogin]&8-----------%ln%&2Welcome on Server. You need to login.%ln%&4use /xsignin login <pw>&f%ln%&8------------------------------'
     agb: '&8-----------&6[xagb]&8-----------%ln%&2Welcome on Server. If you want to player you need to accept the AGB first.%ln%&4use /xagb help&f%ln%&8------------------------------'
-    maintenance: '&4At the moment you can not join, the server is on maintenance mode'
+    maintenance: '&cAt the moment you can not join, the server is on maintenance mode'
+    not-on-whitelist: '&cYou are not whitelisted'
+    on-blacklist: '&cYou are blacklisted'

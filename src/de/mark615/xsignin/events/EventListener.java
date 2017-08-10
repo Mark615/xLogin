@@ -3,6 +3,7 @@ package de.mark615.xsignin.events;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -36,18 +37,33 @@ public class EventListener implements Listener
 		}
 	}
 	
-	
-	@EventHandler
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPlayerJoin(PlayerJoinEvent e)
 	{
-		this.plugin.getLoginManager().registerPlayer(e.getPlayer());
-		plugin.getLoginManager().getPlayer(e.getPlayer().getUniqueId()).setLastLoginInfo(0);
+		final Player p = e.getPlayer();
 		
-		if (plugin.isMaintenanceMode() && !e.getPlayer().hasPermission("xsignin.xmaintenance.join"))
+		if (!plugin.getLoginManager().getListManager().isPlayerAllowedToJoin(p))
 		{
-			e.getPlayer().kickPlayer(XUtil.getMessage("message.maintenance"));
+			if (plugin.getLoginManager().getListManager().isWhitelist())
+			{
+				p.kickPlayer(XUtil.getMessage("message.not-on-whitelist"));
+			}
+			else
+			if (plugin.getLoginManager().getListManager().isBlacklist())
+			{
+				p.kickPlayer(XUtil.getMessage("message.on-blacklist"));
+			}
 			return;
 		}
+		
+		if (plugin.isMaintenanceMode() && !p.hasPermission("xsignin.xmaintenance.join"))
+		{
+			p.kickPlayer(XUtil.getMessage("message.maintenance"));
+			return;
+		}
+		
+		plugin.getLoginManager().registerPlayer(p);
+		plugin.getLoginManager().getPlayer(p.getUniqueId()).setLastLoginInfo(0);
 	}
 	
 	@EventHandler

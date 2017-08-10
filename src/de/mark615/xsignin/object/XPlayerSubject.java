@@ -80,6 +80,7 @@ public class XPlayerSubject
 		this.loggedIN = false;
 		this.logoutTime = System.currentTimeMillis();
 		this.lastloginInfo = 0;
+		this.agbaccepted = false;
 	}
 	
 	public int getDBID()
