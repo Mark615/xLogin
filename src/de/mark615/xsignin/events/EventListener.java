@@ -130,7 +130,7 @@ public class EventListener implements Listener
 		{
 			if (this.plugin.getLoginManager().isPlayerLoggedIn(p))
 			{
-				if (this.plugin.getLoginManager().getAGBManager().hasXPlayerAcceptAGB(p))
+				if (this.plugin.getLoginManager().getAGBManager().hasXPlayerAcceptAGB(p.getUniqueId()))
 					value = true;
 			}
 		}

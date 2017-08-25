@@ -1,6 +1,7 @@
 package de.mark615.xsignin;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -42,7 +43,7 @@ public class AGBManager
 		this.enabled = SettingManager.getInstance().isAGBEnbale();
 	}
 	
-	public boolean hasXPlayerAcceptAGB(Player p)
+	public boolean hasXPlayerAcceptAGB(UUID uuid)
 	{
 		if (!this.enabled)
 			return true;
@@ -50,7 +51,7 @@ public class AGBManager
 		boolean value = false;
 		try
 		{
-			XPlayerSubject subject = plugin.getLoginManager().getPlayer(p.getUniqueId());
+			XPlayerSubject subject = plugin.getLoginManager().getPlayer(uuid);
 			if (subject == null)
 				return false;
 			value = db.hasXPlayerAcceptAGB(subject.getDBID(), version);

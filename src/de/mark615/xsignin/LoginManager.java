@@ -50,9 +50,10 @@ public class LoginManager
 		else
 		{
 			this.player.put(target.getUniqueId(), database.loadXPlayerSubject(target.getUniqueId()));
+			subject = this.player.get(target.getUniqueId());
 		}
 		
-		if (plugin.getLoginManager().getAGBManager().hasXPlayerAcceptAGB(subject.getPlayer()))
+		if (agbManager.hasXPlayerAcceptAGB(subject.getPlayer().getUniqueId()))
 			this.player.get(target.getUniqueId()).setAGBAccepted();
 	}
 	
