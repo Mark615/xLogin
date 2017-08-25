@@ -52,7 +52,8 @@ public class LoginManager
 			this.player.put(target.getUniqueId(), database.loadXPlayerSubject(target.getUniqueId()));
 		}
 		
-		this.player.get(target.getUniqueId()).hasAGBAccepted();
+		if (plugin.getLoginManager().getAGBManager().hasXPlayerAcceptAGB(subject.getPlayer()))
+			this.player.get(target.getUniqueId()).setAGBAccepted();
 	}
 	
 	public void unregisterPlayer(Player target)

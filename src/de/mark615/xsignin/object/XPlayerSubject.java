@@ -27,6 +27,7 @@ public class XPlayerSubject
 		this.loginTime = 0;
 		this.logoutTime = 0;
 		this.lastloginInfo = 0;
+		this.agbaccepted = false;
 	}
 	
 	public boolean isLoggedIn()
@@ -44,6 +45,7 @@ public class XPlayerSubject
 		this.loggedIN = true;
 		this.loginIP = getPlayer().getAddress().getHostName();
 		this.loginTime = System.currentTimeMillis();
+		this.agbaccepted = !XSignIn.getInstance().getLoginManager().getAGBManager().isEnabled();
 		triggerLoginEvent();
 	}
 	
@@ -60,10 +62,7 @@ public class XPlayerSubject
 	{
 		if (loginIP.equals(getPlayer().getAddress().getHostName()))
 		{	
-			this.loggedIN = true;
-			this.loginIP = getPlayer().getAddress().getHostName();
-			this.loginTime = System.currentTimeMillis();
-			triggerLoginEvent();
+			logPlayerIn();
 			return true;
 		}
 		return false;

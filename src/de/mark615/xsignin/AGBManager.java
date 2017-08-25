@@ -80,5 +80,9 @@ public class AGBManager
 		}
 	}
 	
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
 	
 }

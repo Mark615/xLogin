@@ -62,6 +62,7 @@ public class EventListener implements Listener
 			return;
 		}
 		
+		checkLoggedIn(p);
 		plugin.getLoginManager().registerPlayer(p);
 		plugin.getLoginManager().getPlayer(p.getUniqueId()).setLastLoginInfo(0);
 	}
@@ -125,7 +126,7 @@ public class EventListener implements Listener
 	private boolean checkLoggedIn(Player p)
 	{
 		boolean value = false;
-		if (p != null)
+		if (hasPlayer(p))
 		{
 			if (this.plugin.getLoginManager().isPlayerLoggedIn(p))
 			{
@@ -169,6 +170,11 @@ public class EventListener implements Listener
 				}
 			}
 		}, 1, 4);
+	}
+	
+	private boolean hasPlayer(Player p)
+	{
+		return p == null ? false : (plugin.getLoginManager().getPlayer(p.getUniqueId()) == null ? false : true);
 	}
 	
 }

@@ -10,12 +10,10 @@ import de.mark615.xsignin.ListManager.ListType;
 public class XApiConnector extends XSignInApi
 {
 	private XSignIn plugin;
-	//private PriorityConfigBase priority;
 	
 	public XApiConnector(de.mark615.xapi.XApi xapi, XSignIn plugin)
 	{
 		super(xapi);
-		//this.priority = xapi.getPriorityConfig();
 		this.plugin = plugin;
 	}
 
