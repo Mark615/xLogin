@@ -152,20 +152,18 @@ public class EventListener implements Listener
 						if (!plugin.getLoginManager().hasAccount(p))
 						{
 							XUtil.sendFileMessage(p, "message.register", true);
-							subject.setLastLoginInfo(System.currentTimeMillis());
 						}
 						else
 						if (!subject.isLoggedIn())
 						{
 							XUtil.sendFileMessage(p, "message.login", true);
-							subject.setLastLoginInfo(System.currentTimeMillis());
 						}
 						else
 						if (!subject.hasAGBAccepted())
 						{
 							XUtil.sendFileMessage(p, "message.agb", true);
-							subject.setLastLoginInfo(System.currentTimeMillis());
 						}
+						subject.setLastLoginInfo(System.currentTimeMillis());
 					}
 				}
 			}

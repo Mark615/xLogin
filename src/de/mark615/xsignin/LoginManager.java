@@ -54,7 +54,7 @@ public class LoginManager
 		}
 		
 		if (agbManager.hasXPlayerAcceptAGB(subject.getPlayer().getUniqueId()))
-			this.player.get(target.getUniqueId()).setAGBAccepted();
+			subject.setAGBAccepted();
 	}
 	
 	public void unregisterPlayer(Player target)

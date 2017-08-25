@@ -86,7 +86,6 @@ public class CommandXSignIn extends XCommand
 				PassMatch passmatch = XUtil.matchPasswordRules(args[1]);
 				if (!passmatch.equals(PassMatch.OK))
 				{
-					XUtil.sendFileMessage(target, "command.not-match-rules", ChatColor.RED);
 					XUtil.sendFileMessage(target, "command.not-match-" + passmatch, ChatColor.RED);
 					XUtil.sendCommandUsage(sender, "use: /xsignin change <oldpw> <newpw> " + ChatColor.YELLOW + "- for changing Password");
 					return XCommandReturnType.NONE;
