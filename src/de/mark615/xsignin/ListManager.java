@@ -177,14 +177,14 @@ public class ListManager
 		{
 			XUtil.info("Whitelist is enabled");
 			SettingManager.getInstance().setBlacklist(false);
-			if (this.plugin.hasAPI())
-				this.plugin.getAPI().createBlacklistChangedStateEvent(false);
+			if (this.plugin.hasXApiConnector())
+				this.plugin.getXApiConnector().createBlacklistChangedStateEvent(false);
 		}
 		SettingManager.getInstance().saveConfig();
 		this.plugin.getLoginManager().getListManager().refreshListState();
 		
-		if (this.plugin.hasAPI())
-			this.plugin.getAPI().createWhitelistChangedStateEvent(value);
+		if (this.plugin.hasXApiConnector())
+			this.plugin.getXApiConnector().createWhitelistChangedStateEvent(value);
 	}
 	
 	public boolean containsWhitelistElement(String value, ListType type)
@@ -232,14 +232,14 @@ public class ListManager
 		{
 			XUtil.info("Blacklist is enabled");
 			SettingManager.getInstance().setWhitelist(false);
-			if (this.plugin.hasAPI())
-				this.plugin.getAPI().createWhitelistChangedStateEvent(false);
+			if (this.plugin.hasXApiConnector())
+				this.plugin.getXApiConnector().createWhitelistChangedStateEvent(false);
 		}
 		SettingManager.getInstance().saveConfig();
 		this.plugin.getLoginManager().getListManager().refreshListState();
 		
-		if (this.plugin.hasAPI())
-			this.plugin.getAPI().createBlacklistChangedStateEvent(value);
+		if (this.plugin.hasXApiConnector())
+			this.plugin.getXApiConnector().createBlacklistChangedStateEvent(value);
 	}
 	
 	public boolean containsBlacklistElement(String value, ListType type)

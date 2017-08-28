@@ -42,8 +42,9 @@ public class XPlayerSubject
 	public void logPlayerIn()
 	{
 		this.loggedIN = true;
-		this.loginIP = getPlayer().getAddress().getHostName();
+		this.loginIP = getPlayer().getAddress().getAddress().getHostAddress();
 		this.loginTime = System.currentTimeMillis();
+		this.logoutTime = 0;
 		triggerLoginEvent();
 	}
 	
@@ -68,8 +69,8 @@ public class XPlayerSubject
 	
 	private void triggerLoginEvent()
 	{
-		if (XSignIn.getInstance() != null && XSignIn.getInstance().hasAPI())
-			XSignIn.getInstance().getAPI().createPlayerLoggedInEvent(getPlayer());
+		if (XSignIn.getInstance() != null && XSignIn.getInstance().hasXApiConnector())
+			XSignIn.getInstance().getXApiConnector().createPlayerLoggedInEvent(getPlayer());
 	}
 	
 	public void logPlayerOut()
@@ -108,6 +109,14 @@ public class XPlayerSubject
 	public String getLoginIP()
 	{
 		return loginIP;
+	}
+	
+	public long getOnlineTime()
+	{
+		if (logoutTime == 0)
+			return (System.currentTimeMillis() - loginTime);
+		else
+			return (logoutTime - loginTime);
 	}
 	
 	public long getLastLoginInfo()

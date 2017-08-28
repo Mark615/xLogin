@@ -53,6 +53,12 @@ public class CommandXSignIn extends XCommand
 			return XCommandReturnType.NONE;
 		}
 		
+		if (!plugin.getLoginManager().isEnabled())
+		{
+			XUtil.sendFileMessage(sender, "command.not-enable", ChatColor.YELLOW);
+			return XCommandReturnType.SUCCESS;
+		}
+		
 		if (matchesSubCommand("login", args[0]))
 		{
 			if (!matchPermission(sender, "xsignin.login"))
@@ -99,7 +105,7 @@ public class CommandXSignIn extends XCommand
 			else
 			{
 				XUtil.sendFileMessage(sender, "command.xsignin.login.success", ChatColor.GREEN);
-				this.plugin.getLoginManager().getPlayer(target.getUniqueId()).logPlayerIn();
+				this.plugin.getLoginManager().getXSubjectPlayer(target.getUniqueId()).logPlayerIn();
 			}
 			return XCommandReturnType.SUCCESS;
 		}
@@ -144,10 +150,10 @@ public class CommandXSignIn extends XCommand
 			}
 			
 			
-			if (this.plugin.getLoginManager().registerPlayer(this.plugin.getLoginManager().getPlayer(target.getUniqueId()), args[1]))
+			if (this.plugin.getLoginManager().registerPlayer(this.plugin.getLoginManager().getXSubjectPlayer(target.getUniqueId()), args[1]))
 			{
 				XUtil.sendFileMessage((Player)sender, "command.xsignin.register.success", ChatColor.GREEN);
-				this.plugin.getLoginManager().getPlayer(target.getUniqueId()).registerPlayer();
+				this.plugin.getLoginManager().getXSubjectPlayer(target.getUniqueId()).registerPlayer();
 			}
 			return XCommandReturnType.SUCCESS;
 		}
@@ -233,7 +239,7 @@ public class CommandXSignIn extends XCommand
 			
 			if (this.plugin.getLoginManager().resetPlayer(target))
 			{
-				this.plugin.getLoginManager().getPlayer(target.getUniqueId()).logPlayerOut();
+				this.plugin.getLoginManager().getXSubjectPlayer(target.getUniqueId()).logPlayerOut();
 				XUtil.sendFileMessage(target, "command.xsignin.reset.success", ChatColor.GREEN);
 			}
 			return XCommandReturnType.SUCCESS;

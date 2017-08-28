@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import de.mark615.xsignin.database.XAGBDatabase;
 import de.mark615.xsignin.object.XPlayerSubject;
+import de.mark615.xsignin.object.XUtil;
 
 public class AGBManager
 {
@@ -22,7 +23,10 @@ public class AGBManager
 		this.version = 0;
 		this.enabled = SettingManager.getInstance().isAGBEnbale();
 		if (this.enabled)
+		{
 			hasAGBChanged();
+			XUtil.info("AGB is enabled");
+		}
 	}
 	
 	private void hasAGBChanged()
@@ -51,7 +55,7 @@ public class AGBManager
 		boolean value = false;
 		try
 		{
-			XPlayerSubject subject = plugin.getLoginManager().getPlayer(uuid);
+			XPlayerSubject subject = plugin.getLoginManager().getXSubjectPlayer(uuid);
 			if (subject == null)
 				return false;
 			value = db.hasXPlayerAcceptAGB(subject.getDBID(), version);
@@ -69,7 +73,7 @@ public class AGBManager
 	{
 		try
 		{
-			XPlayerSubject subject = plugin.getLoginManager().getPlayer(p.getUniqueId());
+			XPlayerSubject subject = plugin.getLoginManager().getXSubjectPlayer(p.getUniqueId());
 			if (subject == null)
 				return;
 			db.setXPlayerAcceptAGB(subject.getDBID(), version);

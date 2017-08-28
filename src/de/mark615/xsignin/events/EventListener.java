@@ -33,7 +33,7 @@ public class EventListener implements Listener
 	{
 		for (Player p : Bukkit.getServer().getOnlinePlayers())
 		{
-			plugin.getLoginManager().getPlayer(p.getUniqueId()).setLastLoginInfo(0);
+			plugin.getLoginManager().getXSubjectPlayer(p.getUniqueId()).setLastLoginInfo(0);
 		}
 	}
 	
@@ -64,7 +64,7 @@ public class EventListener implements Listener
 		
 		checkLoggedIn(p);
 		plugin.getLoginManager().registerPlayer(p);
-		plugin.getLoginManager().getPlayer(p.getUniqueId()).setLastLoginInfo(0);
+		plugin.getLoginManager().getXSubjectPlayer(p.getUniqueId()).setLastLoginInfo(0);
 	}
 	
 	@EventHandler
@@ -146,7 +146,7 @@ public class EventListener implements Listener
 			{
 				for (Player p : Bukkit.getServer().getOnlinePlayers())
 				{
-					XPlayerSubject subject = plugin.getLoginManager().getPlayer(p.getUniqueId());
+					XPlayerSubject subject = plugin.getLoginManager().getXSubjectPlayer(p.getUniqueId());
 					if (System.currentTimeMillis() - subject.getLastLoginInfo() > plugin.getSettingManager().getLoginMessageIntervall())
 					{
 						if (!plugin.getLoginManager().hasAccount(p))
@@ -172,7 +172,7 @@ public class EventListener implements Listener
 	
 	private boolean hasPlayer(Player p)
 	{
-		return p == null ? false : (plugin.getLoginManager().getPlayer(p.getUniqueId()) == null ? false : true);
+		return p == null ? false : (plugin.getLoginManager().getXSubjectPlayer(p.getUniqueId()) == null ? false : true);
 	}
 	
 }

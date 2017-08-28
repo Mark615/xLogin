@@ -58,6 +58,7 @@ public class XDatabase
 		//user database
 		stmt = con.createStatement();
 		stmt.execute("CREATE TABLE IF NOT EXISTS xuser (id INTEGER PRIMARY KEY, uuid TEXT not null, name TEXT not null, password TEXT not null, lastlogin INTEGER, lastlogout INTEGER, logincounter INTEGER)");
+		stmt.execute("CREATE TABLE IF NOT EXISTS loginhistory (xuserID INTEGER not null, ip TEXT not null, loginTime INTEGER not null, logoutTime INTEGER not null, onlineTime INTEGER default 0, aftTime INTEGER default 0)");
 		stmt.close();
 	}
 	
@@ -185,7 +186,16 @@ public class XDatabase
 	private void saveXPlayer(XPlayerSubject subject) throws SQLException
 	{	
 		stmt = con.createStatement();
-		stmt.execute("UPDATE xuser SET lastlogin = " + subject.getLoginTime() + ", lastlogout = " + subject.getLogoutTime() + " WHERE uuid = '" + subject.getUUID().toString() + "'");
+		stmt.execute("UPDATE xuser SET " +
+				"lastlogin = " + subject.getLoginTime() + ", " +
+				"lastlogout = " + subject.getLogoutTime() + " " +
+				"WHERE uuid = '" + subject.getUUID().toString() + "'");
+		stmt.execute("INSERT INTO loginhistory (xuserID, ip, loginTime, logoutTime, onlineTime) VALUES (" + 
+				subject.getDBID() + ", '" +
+				subject.getLoginIP() + "', " + 
+				subject.getLoginTime() + ", " + 
+				subject.getLogoutTime() + ", " + 
+				subject.getOnlineTime() + ")");
 		stmt.close();
 	}
 	
@@ -220,5 +230,48 @@ public class XDatabase
 		}
 		return id;
 	}
+	
+	
+	
+	public String getNameFromIp(String ip)
+	{
+		String name = null;
+		try
+		{
+			stmt = con.createStatement();
+			ResultSet res = stmt.executeQuery("select name, uuid, max(logintime) from xuser join loginhistory on id = xuserID where ip = '" + ip + "'");
+			if (res.next())
+			{
+				name = res.getString("name");
+			}
+			stmt.close();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return name;
+	}
+	
+	public UUID getUUIDFromIp(String ip)
+	{
+		UUID uuid = null;
+		try
+		{
+			stmt = con.createStatement();
+			ResultSet res = stmt.executeQuery("select name, uuid, max(logintime) from xuser join loginhistory on id = xuserID where ip = '" + ip + "'");
+			if (res.next())
+			{
+				uuid = UUID.fromString(res.getString("uuid"));
+			}
+			stmt.close();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return uuid;
+	}
+	
 	
 }

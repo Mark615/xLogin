@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import de.mark615.xsignin.ListManager;
 import de.mark615.xsignin.ListManager.ListType;
+import de.mark615.xsignin.SettingManager;
 import de.mark615.xsignin.XSignIn;
 import de.mark615.xsignin.object.XUtil;
 
@@ -72,6 +73,12 @@ public class CommandWhitelist extends XCommand
 			this.plugin.getLoginManager().getListManager().setWhitelist(false);
 			XUtil.sendFileMessage(sender, "command.whitelist.disable.success", ChatColor.GREEN);
 			
+			return XCommandReturnType.SUCCESS;
+		}
+		
+		if (!SettingManager.getInstance().isWhitelist())
+		{
+			XUtil.sendFileMessage(sender, "command.not-enable", ChatColor.YELLOW);
 			return XCommandReturnType.SUCCESS;
 		}
 		

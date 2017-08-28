@@ -42,6 +42,8 @@ public class SettingManager
 		config = YamlConfiguration.loadConfiguration(cFile);
 		config.options().copyDefaults(true);
 		
+		boolean updateConfig = (config.getConfigurationSection("login") == null);
+		
 		//Load default config
 		try
 		{
@@ -81,6 +83,23 @@ public class SettingManager
 		{
 			XUtil.severe("Could not save message.yml!");
 		}
+		
+		
+		if (updateConfig)
+		{
+			config.set("login.auto-relog", config.getBoolean("auto-relog"));
+			config.set("login.auto-relog-min", config.getBoolean("auto-relog-min"));
+			config.set("login.password.length", config.getBoolean("password.length"));
+			config.set("login.password.digitChar", config.getBoolean("password.digitChar"));
+			config.set("login.password.upperAndLowerChar", config.getBoolean("password.upperAndLowerChar"));
+			config.set("login.password.specialChar", config.getBoolean("password.specialChar"));
+
+			config.set("auto-relog", null);
+			config.set("auto-relog-min", null);
+			config.set("password", null);
+			
+			saveConfig();
+		}
     }
     
    
@@ -115,12 +134,12 @@ public class SettingManager
     
     public boolean hasAutoRelog()
     {
-    	return config.getBoolean("auto-relog", false);
+    	return config.getBoolean("login.auto-relog", false);
     }
     
     public int getAutoRelogTime()
     {
-    	return (config.getInt("auto-relog-min", 5) * 1000);
+    	return (config.getInt("login.auto-relog-min", 5) * 1000);
     }
     
     public int getLoginMessageIntervall()
@@ -131,6 +150,11 @@ public class SettingManager
     public boolean hasCheckVersion()
     {
     	return config.getBoolean("updatecheck", true);
+    }
+    
+    public boolean isLogin()
+    {
+    	return config.getBoolean("login.enable", true);
     }
     
     public boolean isMaintenance()
@@ -155,22 +179,22 @@ public class SettingManager
     
     public int needPasswordLength()
     {
-    	return config.getInt("password.length", 0);
+    	return config.getInt("login.password.length", 0);
     }
     
     public boolean needPasswordUpperAndLower()
     {
-    	return config.getBoolean("password.upperAndLowerChar", false);
+    	return config.getBoolean("login.password.upperAndLowerChar", false);
     }
     
     public boolean needPasswordSpecialChar()
     {
-    	return config.getBoolean("password.specialChar", false);
+    	return config.getBoolean("login.password.specialChar", false);
     }
     
     public boolean needPasswordDigitChar()
     {
-    	return config.getBoolean("password.digitChar", false);
+    	return config.getBoolean("login.password.digitChar", false);
     }
 	
 	public boolean isWhitelist()

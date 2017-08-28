@@ -3,6 +3,7 @@ command:
     nopermission: 'You don''t have permissions to run this command'
     player-not-found: 'The Player can''t be found'
     no-consol-command: 'This is a player command'
+    not-enable: 'this function isn''t in use'
     already-logged-in: 'You are logged in'
     wrong-pw: 'Password is wrong'
     not-match-rules: '&cPassword isn''t matching the passwordrules'

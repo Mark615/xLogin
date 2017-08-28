@@ -16,6 +16,7 @@ public class LoginManager
 {
 	private XDatabase database = null;
 	private XSignIn plugin = null;
+	private boolean enable = true;
 	private AGBManager agbManager = null;
 	private ListManager listManager = null;
 	private Map<UUID, XPlayerSubject> player = null;
@@ -27,6 +28,7 @@ public class LoginManager
 		this.database = new XDatabase();
 		database.isValid();
 		
+		this.enable = SettingManager.getInstance().isLogin();
 		this.agbManager = new AGBManager(plugin, database.getAGBDatabse());
 		this.listManager = new ListManager(plugin, database.getWBLDatabase());
 	}
@@ -34,7 +36,7 @@ public class LoginManager
 	public void registerPlayer(Player target)
 	{
 		XPlayerSubject subject = player.get(target.getUniqueId());
-		if (subject != null)
+		if (subject != null && enable)
 		{
 			if (target.hasPermission("xsignin.autorelog") && plugin.getSettingManager().hasAutoRelog())
 			{
@@ -52,6 +54,9 @@ public class LoginManager
 			this.player.put(target.getUniqueId(), database.loadXPlayerSubject(target.getUniqueId()));
 			subject = this.player.get(target.getUniqueId());
 		}
+		
+		if (!enable)
+			subject.logPlayerIn();
 		
 		if (agbManager.hasXPlayerAcceptAGB(subject.getPlayer().getUniqueId()))
 			subject.setAGBAccepted();
@@ -88,8 +93,8 @@ public class LoginManager
 			{
 				XUtil.sendFileMessage(target.getPlayer(), "message.first-join");
 			}
-			if (this.plugin.hasAPI())
-				this.plugin.getAPI().createPlayerFirstJoinEvent(target.getPlayer());
+			if (this.plugin.hasXApiConnector())
+				this.plugin.getXApiConnector().createPlayerFirstJoinEvent(target.getPlayer());
 		}
 		catch (SQLException e)
 		{
@@ -119,8 +124,8 @@ public class LoginManager
 		{
 			database.setPlayerPassword(target.getUniqueId(), XUtil.toHash(pw));
 
-			if (this.plugin.hasAPI())
-				this.plugin.getAPI().createPlayerPasswordChangedEvent(target);
+			if (this.plugin.hasXApiConnector())
+				this.plugin.getXApiConnector().createPlayerPasswordChangedEvent(target);
 		}
 		catch (SQLException e)
 		{
@@ -140,8 +145,8 @@ public class LoginManager
 		{
 			database.resetPlayer(target.getUniqueId());
 
-			if (this.plugin.hasAPI())
-				this.plugin.getAPI().createPlayerResetEvent(target);
+			if (this.plugin.hasXApiConnector())
+				this.plugin.getXApiConnector().createPlayerResetEvent(target);
 		}
 		catch (SQLException e)
 		{
@@ -207,10 +212,9 @@ public class LoginManager
 	
 	
 	
-	
-	public XPlayerSubject getPlayer(UUID uuid)
+	public boolean isEnabled()
 	{
-		return player.get(uuid);
+		return enable;
 	}
 	
 	public AGBManager getAGBManager()
@@ -223,8 +227,24 @@ public class LoginManager
 		return listManager;
 	}
 	
+	public XPlayerSubject getXSubjectPlayer(UUID uuid)
+	{
+		return player.get(uuid);
+	}
+	
 	public int getXPlayerSubjectID(UUID uuid)
 	{
 		return database.getXPlayerSubjectID(uuid);
+	}
+	
+	
+	public String getNameFromIp(String ip)
+	{
+		return database.getNameFromIp(ip);
+	}
+	
+	public UUID getUUIDFromIp(String ip)
+	{
+		return database.getUUIDFromIp(ip);
 	}
 }

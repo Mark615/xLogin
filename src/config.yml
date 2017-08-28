@@ -1,21 +1,15 @@
 first-join-message: true
-
 login-message-intervall: 10
 
-auto-relog: true
-auto-relog-min: 5
-
-updatecheck: true
-
-maintenance: false
-whitelist: false
-blacklist: false
-
-password:
-    length: 5
-    digitChar: true
-    upperAndLowerChar: true
-    specialChar: true
+login:
+    enable: true
+    auto-relog: true
+    auto-relog-min: 15    
+    password:
+        length: 5
+        digitChar: true
+        upperAndLowerChar: true
+        specialChar: true
 
 agb:
     enable: true
@@ -25,5 +19,10 @@ agb:
     - '&a Annanas'
     - '&4 Dies das &2bla bla &4ist ok'
     - '&7---------------------------'
-    
+
+maintenance: false
+whitelist: false
+blacklist: false
+   
+updatecheck: true
     

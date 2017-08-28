@@ -30,6 +30,7 @@ public class XSignIn extends JavaPlugin
 	
 	private static XSignIn instance = null;
 
+	private XApi xapi;
 	private XApiConnector xapiconn = null;
 	private SettingManager settings = null;
 	private LoginManager loginManager = null;
@@ -56,9 +57,9 @@ public class XSignIn extends JavaPlugin
 			XUtil.info("connected with xApi");
 		}
 		
+		loadPlugin();
 		XUtil.onEnable();
 		XUtil.updateCheck(this);
-		loadPlugin();
 		XUtil.info("Enabled Build " + BUILD);
 	}
 
@@ -113,6 +114,7 @@ public class XSignIn extends JavaPlugin
     	if(xapi == null)
     		return false;
     	
+    	this.xapi = xapi;
     	try
     	{
 	    	if (xapi.checkVersion(XType.xSignIn, BUILD))
@@ -173,19 +175,36 @@ public class XSignIn extends JavaPlugin
 		return true;
 	}
 
+	
+	
 	public SettingManager getSettingManager()
 	{
 		return this.settings;
 	}
-	
-	public XApiConnector getAPI()
+
+	public boolean hasXApi()
 	{
-		return this.xapiconn;
+		return (xapi != null && xapi.getXPlugin(XType.xSignIn) != null);
 	}
 	
-	public boolean hasAPI()
+	public boolean hasXApi(XType type)
 	{
-		return this.xapiconn != null;
+		return (hasXApi() && xapi.getXPlugin(type) != null);
+	}
+	
+	public XApi getXApi()
+	{
+		return xapi;
+	}
+	
+	public boolean hasXApiConnector()
+	{
+		return xapiconn != null;
+	}
+	
+	public XApiConnector getXApiConnector()
+	{
+		return xapiconn;
 	}
 	
 	public LoginManager getLoginManager()
@@ -206,7 +225,7 @@ public class XSignIn extends JavaPlugin
 		this.maintenanceMode = value;
 		settings.getConfig().set("maintenance", value);
 		settings.saveConfig();
-		if (hasAPI())
-			getAPI().createMaintenanceModeSwitchEvent(value);
+		if (hasXApiConnector())
+			getXApiConnector().createMaintenanceModeSwitchEvent(value);
 	}
 }

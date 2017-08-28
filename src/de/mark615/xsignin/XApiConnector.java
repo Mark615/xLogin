@@ -1,6 +1,7 @@
 package de.mark615.xsignin;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -40,6 +41,8 @@ public class XApiConnector extends XSignInApi
 	{
 		return this.plugin.getLoginManager().isPlayerLoggedIn(target);
 	}
+	
+	
 
 	@Override
 	public boolean isMaintenanceMode()
@@ -53,12 +56,24 @@ public class XApiConnector extends XSignInApi
 		this.plugin.setMaintenanceMode(value);
 		return true;
 	}
+	
+	
 
 	@Override
 	public List<String> getAGB()
 	{
 		return SettingManager.getInstance().getAGBMessage();
 	}
+
+	@Override
+	public void setAGB(boolean arg0)
+	{
+		SettingManager.getInstance().setAGBEnabled(arg0);
+		SettingManager.getInstance().saveConfig();
+		this.plugin.getLoginManager().getAGBManager().refreshAGBState();
+	}
+	
+	
 
 	@Override
 	public boolean isBlacklist()
@@ -72,14 +87,8 @@ public class XApiConnector extends XSignInApi
 		return this.plugin.getLoginManager().getListManager().isWhitelist();
 	}
 
-	@Override
-	public void setAGB(boolean arg0)
-	{
-		SettingManager.getInstance().setAGBEnabled(arg0);
-		SettingManager.getInstance().saveConfig();
-		this.plugin.getLoginManager().getAGBManager().refreshAGBState();
-	}
-
+	
+	
 	@Override
 	public void setBlacklist(boolean value)
 	{
@@ -157,6 +166,20 @@ public class XApiConnector extends XSignInApi
 		}
 		
 		return result;
+	}
+
+	
+	
+	@Override
+	public UUID getUUIDfromIP(String ip)
+	{
+		return plugin.getLoginManager().getUUIDFromIp(ip);
+	}
+
+	@Override
+	public String getNamefromIP(String ip)
+	{
+		return plugin.getLoginManager().getNameFromIp(ip);
 	}
 	
 }

@@ -55,6 +55,12 @@ public class CommandAGB extends XCommand
 		}
 
 		Player target = (Player)sender;
+		if (!plugin.getLoginManager().getAGBManager().isEnabled())
+		{
+			XUtil.sendFileMessage(target, "command.not-enable", ChatColor.YELLOW);
+			return XCommandReturnType.SUCCESS;
+		}
+
 		if (matchesSubCommand("accept", args[0]))
 		{
 			plugin.getLoginManager().getAGBManager().setXPlayerAcceptAGB(target);
