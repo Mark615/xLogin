@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.java.mcstats.Metrics;
 
 import de.mark615.xapi.XApi;
 import de.mark615.xapi.versioncheck.VersionCheck;
@@ -24,11 +25,12 @@ import de.mark615.xsignin.object.XUtil;
 
 public class XSignIn extends JavaPlugin
 {
-	public static final int BUILD = 6;
+	public static final int BUILD = 7;
 	public static final String PLUGIN_NAME = "[xSignIn] ";
 	public static final String PLUGIN_NAME_SHORT = "[xSignIn] ";
 	
 	private static XSignIn instance = null;
+	private Metrics metrics = null;
 
 	private XApi xapi;
 	private XApiConnector xapiconn = null;
@@ -57,8 +59,15 @@ public class XSignIn extends JavaPlugin
 			XUtil.info("connected with xApi");
 		}
 		
+		try{
+			metrics = new Metrics(this);
+			metrics.start();
+			XUtil.info("hooked to [Metrics]");
+		} catch (Exception e){
+			XUtil.severe("Can't hook to [Metrics]", e);
+		}
+		
 		loadPlugin();
-		XUtil.onEnable();
 		XUtil.updateCheck(this);
 		XUtil.info("Enabled Build " + BUILD);
 	}
@@ -66,7 +75,6 @@ public class XSignIn extends JavaPlugin
 	@Override
 	public void onDisable()
 	{
-		XUtil.onDisable();
 		for (Player p : Bukkit.getServer().getOnlinePlayers())
 		{
 			this.loginManager.unregisterPlayer(p);

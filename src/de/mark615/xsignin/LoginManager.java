@@ -232,7 +232,7 @@ public class LoginManager
 		return player.get(uuid);
 	}
 	
-	public int getXPlayerSubjectID(UUID uuid)
+	public int getXSubjectPlayerID(UUID uuid)
 	{
 		return database.getXPlayerSubjectID(uuid);
 	}

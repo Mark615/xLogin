@@ -90,8 +90,10 @@ public class CommandBlacklist extends XCommand
 			boolean usage = false;
 			if (args.length < 3)
 				usage = true;
-			
-			ListType type = ListManager.checkListType(args[2]);
+
+			ListType type = null;
+			if (args.length > 2)
+				type = ListManager.checkListType(args[2]);
 			if (type == null)
 				usage = true;
 			

@@ -128,10 +128,19 @@ public class EventListener implements Listener
 		boolean value = false;
 		if (hasPlayer(p))
 		{
-			if (this.plugin.getLoginManager().isPlayerLoggedIn(p))
-			{
+			if (!plugin.getLoginManager().isEnabled() || this.plugin.getLoginManager().isPlayerLoggedIn(p))
+				value = true;
+			else
+				return false;
+			
+			if (plugin.getLoginManager().getAGBManager().isEnabled()) {
 				if (this.plugin.getLoginManager().getAGBManager().hasXPlayerAcceptAGB(p.getUniqueId()))
 					value = true;
+				else
+					return false;
+			}
+			else {
+				value = true;
 			}
 		}
 		return value;
@@ -149,17 +158,17 @@ public class EventListener implements Listener
 					XPlayerSubject subject = plugin.getLoginManager().getXSubjectPlayer(p.getUniqueId());
 					if (System.currentTimeMillis() - subject.getLastLoginInfo() > plugin.getSettingManager().getLoginMessageIntervall())
 					{
-						if (!plugin.getLoginManager().hasAccount(p))
+						if (!plugin.getLoginManager().hasAccount(p) && plugin.getLoginManager().isEnabled())
 						{
 							XUtil.sendFileMessage(p, "message.register", true);
 						}
 						else
-						if (!subject.isLoggedIn())
+						if (!subject.isLoggedIn() && plugin.getLoginManager().isEnabled())
 						{
 							XUtil.sendFileMessage(p, "message.login", true);
 						}
 						else
-						if (!subject.hasAGBAccepted())
+						if (!subject.hasAGBAccepted() && plugin.getLoginManager().getAGBManager().isEnabled())
 						{
 							XUtil.sendFileMessage(p, "message.agb", true);
 						}

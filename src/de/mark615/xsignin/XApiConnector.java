@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import de.mark615.xapi.interfaces.XSignInApi;
 import de.mark615.xsignin.ListManager.ListType;
+import de.mark615.xsignin.object.XPlayerSubject;
 
 public class XApiConnector extends XSignInApi
 {
@@ -180,6 +181,13 @@ public class XApiConnector extends XSignInApi
 	public String getNamefromIP(String ip)
 	{
 		return plugin.getLoginManager().getNameFromIp(ip);
+	}
+
+	@Override
+	public XPlayerSubject getXSubjectPlayerCopy(UUID uuid) {
+		if (plugin.getLoginManager().getXSubjectPlayer(uuid) != null)
+			return new XPlayerSubject(plugin.getLoginManager().getXSubjectPlayer(uuid));
+		return null;
 	}
 	
 }

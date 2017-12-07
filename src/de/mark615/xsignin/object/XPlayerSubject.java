@@ -10,25 +10,38 @@ import de.mark615.xsignin.XSignIn;
 public class XPlayerSubject
 {
 	private int DBID;
+	private UUID uuid;
 	private boolean loggedIN;
 	private boolean agbaccepted;
 	private String loginIP;
 	private long loginTime;
 	private long logoutTime;
 	private long lastloginInfo;
-	private UUID uuid;
 	
 	public XPlayerSubject(int dbid, UUID uuid)
 	{
-		this.loggedIN = false;
 		this.DBID = dbid;
 		this.uuid = uuid;
+		this.loggedIN = false;
+		this.agbaccepted = false;
 		this.loginIP = "0.0.0.0";
 		this.loginTime = 0;
 		this.logoutTime = 0;
 		this.lastloginInfo = 0;
 	}
 	
+	public XPlayerSubject(XPlayerSubject clone)
+	{
+		this.DBID = clone.DBID;
+		this.uuid = clone.uuid;
+		this.loggedIN = clone.loggedIN;
+		this.agbaccepted = clone.agbaccepted;
+		this.loginIP = clone.loginIP;
+		this.loginTime = clone.loginTime;
+		this.logoutTime = clone.logoutTime;
+		this.lastloginInfo = clone.lastloginInfo;
+	}
+
 	public boolean isLoggedIn()
 	{
 		return loggedIN;
@@ -50,7 +63,7 @@ public class XPlayerSubject
 	
 	public void registerPlayer()
 	{
-		this.DBID = XSignIn.getInstance().getLoginManager().getXPlayerSubjectID(uuid);
+		this.DBID = XSignIn.getInstance().getLoginManager().getXSubjectPlayerID(uuid);
 		this.loggedIN = true;
 		this.loginIP = getPlayer().getAddress().getHostName();
 		this.loginTime = System.currentTimeMillis();

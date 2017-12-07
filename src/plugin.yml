@@ -1,7 +1,7 @@
 name: xSignIn
 main: de.mark615.xsignin.XSignIn
-version: 1.0.6
-description: Login Plugin
+version: 1.0.7
+description: SignIn Plugin
 author: Mark615
 
 commands:
